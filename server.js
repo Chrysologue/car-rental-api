@@ -1,5 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv");
+const { connectToDB } = require("./config/database.js");
 
 dotenv.config();
 
@@ -13,6 +14,11 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-  console.log(`Server running on ${PORT}`);
-});
+const appInit = async () => {
+  await connectToDB();
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+};
+
+appInit();
