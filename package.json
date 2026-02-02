@@ -4,7 +4,9 @@
   "description": "A Car Rental API for searching cars, booking rentals, and managing bookings. Built with Node.js, Express, MongoDB Atlas, JWT, and OAuth",
   "main": "server.js",
   "scripts": {
-    "test": "npm test"
+    "test": "npm test",
+    "dev": "nodemon server.js",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -25,5 +27,13 @@
   "bugs": {
     "url": "https://github.com/Chrysologue/car-rental-api/issues"
   },
-  "homepage": "https://github.com/Chrysologue/car-rental-api#readme"
+  "homepage": "https://github.com/Chrysologue/car-rental-api#readme",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "mongoose": "^9.1.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
 }
