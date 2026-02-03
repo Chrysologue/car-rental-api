@@ -1,10 +1,14 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const { connectToDB } = require("./config/database.js");
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger.json");
 
 dotenv.config();
 
 const app = express();
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get("/", (req, res) => {
   res.status(200).json({

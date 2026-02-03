@@ -6,7 +6,8 @@
   "scripts": {
     "test": "npm test",
     "dev": "nodemon server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "swagger": "node ./swagger.js"
   },
   "repository": {
     "type": "git",
@@ -31,9 +32,11 @@
   "dependencies": {
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
-    "mongoose": "^9.1.5"
+    "mongoose": "^9.1.5",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
-    "nodemon": "^3.1.11"
+    "nodemon": "^3.1.11",
+    "swagger-autogen": "^2.23.7"
   }
 }
