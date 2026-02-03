@@ -25,14 +25,15 @@ Admins can manage cars, locations, users, and rentals.
 
 1. Clone the repository
 2. Install dependencies:
-    npm install
+   npm install
 3. Create a `.env` file and add required environment variables
 4. Start the server:
-    npm start
+   npm start
 
 ## API Endpoints
 
 ### Cars
+
 - POST /cars
 - GET /cars
 - GET /cars/:id
@@ -40,6 +41,7 @@ Admins can manage cars, locations, users, and rentals.
 - DELETE /cars/:id
 
 ### Rentals
+
 - POST /rentals
 - GET /rentals
 - GET /rentals/:id
@@ -48,6 +50,7 @@ Admins can manage cars, locations, users, and rentals.
 - DELETE /rentals/:id
 
 ### Locations
+
 - POST /locations
 - GET /locations
 - GET /locations/:id
@@ -55,6 +58,7 @@ Admins can manage cars, locations, users, and rentals.
 - DELETE /locations/:id
 
 ### Users
+
 - POST /users
 - GET /users
 - GET /users/:id
@@ -62,6 +66,7 @@ Admins can manage cars, locations, users, and rentals.
 - DELETE /users/:id
 
 ## Team Members
+
 - Milton Kumirai
 - John Munina
 - Antony Ochieng
