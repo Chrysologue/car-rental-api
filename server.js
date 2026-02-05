@@ -6,11 +6,15 @@ const dotenv = require('dotenv');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 
+const userRoutes = require("./routes/userRoutes");
+
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 app.use('/api', locationRoute);
+
+app.use("/api", userRoutes);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
