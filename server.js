@@ -1,3 +1,4 @@
+const bookingsRouter = require("./routes/bookingRoutes.js");
 const { connectToDB } = require('./config/database.js');
 const locationRoute = require('./routes/locationRoutes.js');
 const express = require('express');
@@ -22,6 +23,8 @@ app.get('/', (req, res) => {
     message: 'Welcome to Car Rental API',
   });
 });
+
+app.use("/api/bookings", bookingsRouter);
 
 const PORT = process.env.PORT || 3000;
 
