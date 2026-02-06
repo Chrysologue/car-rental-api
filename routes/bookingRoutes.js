@@ -1,19 +1,19 @@
-const { Router } = require("express");
+const { Router } = require('express');
 const {
   addBookingValidation,
   handleValidationErrors,
   mongoIdValidation,
-} = require("../middleware/validationMiddleware");
+} = require('../middleware/validationMiddleware');
 const {
   getAllBookingsController,
   addBookingController,
-} = require("../controllers/bookingController");
+} = require('../controllers/bookingController');
 
 const bookingRouter = Router();
 
-bookingRouter.get("/", getAllBookingsController);
+bookingRouter.get('/', getAllBookingsController);
 bookingRouter.post(
-  "/",
+  '/',
   mongoIdValidation,
   addBookingValidation,
   handleValidationErrors,

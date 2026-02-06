@@ -1,4 +1,4 @@
-const Booking = require("../models/bookingModels");
+const Booking = require('../models/bookingModels');
 
 const getAllBookingsController = async (req, res) => {
   try {
@@ -6,7 +6,7 @@ const getAllBookingsController = async (req, res) => {
     if (bookings.length < 1) {
       return res.status(200).json({
         success: true,
-        message: "You have no bookings yet",
+        message: 'You have no bookings yet',
       });
     }
 
@@ -16,7 +16,7 @@ const getAllBookingsController = async (req, res) => {
     });
   } catch (error) {
     console.log(`Error in getAllBookingsController: ${error}`);
-    return res.status(500).json("Internal Server Error");
+    return res.status(500).json('Internal Server Error');
   }
 };
 
@@ -49,12 +49,12 @@ const addBookingController = async (req, res) => {
 
     return res.status(201).json({
       success: true,
-      message: "Booking successfully created",
+      message: 'Booking successfully created',
       data: savedBooking,
     });
   } catch (error) {
     console.log(`Error in addBookingController: ${error}`);
-    return res.status(500).json("Internal Server Error");
+    return res.status(500).json('Internal Server Error');
   }
 };
 
