@@ -1,39 +1,39 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const bookingSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: [true, "Booking must belong to a user"],
+      ref: 'User',
+      required: [true, 'Booking must belong to a user'],
     },
 
     car: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Car",
-      required: [true, "Booking must have a car"],
+      ref: 'Car',
+      required: [true, 'Booking must have a car'],
     },
 
     pickupLocation: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Location",
-      required: [true, "Pickup location is required"],
+      ref: 'Location',
+      required: [true, 'Pickup location is required'],
     },
 
     returnLocation: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Location",
-      required: [true, "Return location is required"],
+      ref: 'Location',
+      required: [true, 'Return location is required'],
     },
 
     pickupDate: {
       type: Date,
-      required: [true, "Pickup date is required"],
+      required: [true, 'Pickup date is required'],
     },
 
     returnDate: {
       type: Date,
-      required: [true, "Return date is required"],
+      required: [true, 'Return date is required'],
     },
 
     duration: {
@@ -43,12 +43,12 @@ const bookingSchema = new mongoose.Schema(
 
     dailyRate: {
       type: Number,
-      required: [true, "Daily rate is required"],
+      required: [true, 'Daily rate is required'],
     },
 
     totalAmount: {
       type: Number,
-      required: [true, "Total amount is required"],
+      required: [true, 'Total amount is required'],
     },
 
     paidAmount: {
@@ -63,32 +63,32 @@ const bookingSchema = new mongoose.Schema(
 
     insuranceOption: {
       type: String,
-      enum: ["basic", "premium", "full"],
-      default: "basic",
+      enum: ['basic', 'premium', 'full'],
+      default: 'basic',
     },
 
     status: {
       type: String,
       enum: [
-        "pending",
-        "confirmed",
-        "active",
-        "completed",
-        "cancelled",
-        "no-show",
+        'pending',
+        'confirmed',
+        'active',
+        'completed',
+        'cancelled',
+        'no-show',
       ],
-      default: "pending",
+      default: 'pending',
     },
 
     paymentStatus: {
       type: String,
-      enum: ["pending", "paid", "partially-paid", "refunded", "failed"],
-      default: "pending",
+      enum: ['pending', 'paid', 'partially-paid', 'refunded', 'failed'],
+      default: 'pending',
     },
 
     paymentMethod: {
       type: String,
-      enum: ["credit-card", "debit-card", "paypal", "cash", "bank-transfer"],
+      enum: ['credit-card', 'debit-card', 'paypal', 'cash', 'bank-transfer'],
     },
 
     pickupInspection: {
@@ -97,7 +97,7 @@ const bookingSchema = new mongoose.Schema(
       mileage: Number,
       fuelLevel: {
         type: String,
-        enum: ["full", "3/4", "1/2", "1/4", "empty"],
+        enum: ['full', '3/4', '1/2', '1/4', 'empty'],
       },
       notes: String,
       images: [String],
@@ -139,7 +139,7 @@ const bookingSchema = new mongoose.Schema(
 
     specialRequests: {
       type: String,
-      maxlength: [500, "Special requests cannot exceed 500 characters"],
+      maxlength: [500, 'Special requests cannot exceed 500 characters'],
     },
 
     cancellationReason: String,
@@ -153,7 +153,7 @@ const bookingSchema = new mongoose.Schema(
       {
         type: {
           type: String,
-          enum: ["email", "sms", "call", "in-app"],
+          enum: ['email', 'sms', 'call', 'in-app'],
         },
         date: Date,
         subject: String,
@@ -165,6 +165,6 @@ const bookingSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-const Booking = mongoose.model("Booking", bookingSchema);
+const Booking = mongoose.model('Booking', bookingSchema);
 
 module.exports = Booking;
