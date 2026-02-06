@@ -19,6 +19,163 @@
           }
         }
       }
+    },
+
+   
+
+    "/cars": {
+      "x-author": "John Munina",
+      "get": {
+        "tags": ["Cars"],
+        "summary": "Get all cars",
+        "responses": {
+          "200": {
+            "description": "List of cars",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Car"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Cars"],
+        "summary": "Create a new car (Admin only)",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "car",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Car"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Car created"
+          }
+        }
+      }
+    },
+
+    "/cars/{id}": {
+      "x-author": "John Munina",
+      "get": {
+        "tags": ["Cars"],
+        "summary": "Get car by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Car found",
+            "schema": {
+              "$ref": "#/definitions/Car"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Cars"],
+        "summary": "Update car (Admin only)",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "car",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Car"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Car updated"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Cars"],
+        "summary": "Delete car (Admin only)",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Car deleted"
+          }
+        }
+      }
+    }
+
+
+  },
+
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\""
+    }
+  },
+
+  "definitions": {
+    "Car": {
+      "type": "object",
+      "required": ["make", "model", "year"],
+      "properties": {
+        "make": {
+          "type": "string",
+          "example": "Toyota"
+        },
+        "model": {
+          "type": "string",
+          "example": "Corolla"
+        },
+        "year": {
+          "type": "integer",
+          "example": 2023
+        },
+        "available": {
+          "type": "boolean",
+          "example": true
+        }
+      }
     }
   }
 }
