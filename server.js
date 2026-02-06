@@ -1,4 +1,4 @@
-// const bookingsRouter = require('./routes/bookingRoutes.js');
+const bookingsRouter = require('./routes/bookingRoutes.js');
 const { connectToDB } = require('./config/database.js');
 const locationRoute = require('./routes/locationRoutes.js');
 const express = require('express');
@@ -17,6 +17,7 @@ app.use(express.json());
 app.use('/api', locationRoute);
 app.use('/api', authRoute);
 app.use('/api', userRoutes);
+app.use('/api/bookings', bookingsRouter);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
@@ -25,8 +26,6 @@ app.get('/', (req, res) => {
     message: 'Welcome to Car Rental API',
   });
 });
-
-// app.use('/api', bookingsRouter);
 
 const port = process.env.PORT || 3000;
 
