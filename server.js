@@ -25,6 +25,7 @@ app.use('/api/cars', carRouter);
 app.get('/', (req, res) => {
   res.status(200).json({
     message: 'Welcome to Car Rental API',
+    api_docs: 'https://car-rental-api-d7zw.onrender.com/',
   });
 });
 
