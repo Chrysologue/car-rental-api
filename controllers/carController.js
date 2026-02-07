@@ -95,8 +95,95 @@ const addCarController = async (req, res) => {
   }
 };
 
+const updateCarController = async (req, res) => {
+  const { id } = req.params;
+  const {
+    make,
+    model,
+    year,
+    licensePlate,
+    type,
+    color,
+    seats,
+    transmission,
+    fuelType,
+    mileage,
+    location,
+    status,
+    pricePerDay,
+    features,
+    images,
+    description,
+    totalRentals,
+    averageRating,
+  } = req.body;
+
+  try {
+    const car = await Car.findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          make,
+          model,
+          year,
+          licensePlate,
+          type,
+          color,
+          seats,
+          transmission,
+          fuelType,
+          mileage,
+          location,
+          status,
+          pricePerDay,
+          features,
+          images,
+          description,
+          totalRentals,
+          averageRating,
+          location,
+        },
+      },
+      { new: true },
+    );
+    if (!Car) {
+      return res.status(404).json({ success: false, message: 'No Car found' });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Car successfully updated',
+      data: car,
+    });
+  } catch (error) {
+    console.error(`Error in updateBookController: ${error.message}`);
+    res.status(500).json('Internal server error');
+  }
+};
+
+const deleteCarController = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const car = await Car.findByIdAndDelete(id);
+    if (!car) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'Car not found ' });
+    }
+
+    return res
+      .status(204)
+      .json({ success: true, message: 'Car successfully deleted!' });
+  } catch (error) {
+    console.error(`Error in deleteCarController: ${error.message}`);
+    res.status(500).json('Internal server error');
+  }
+};
+
 module.exports = {
   getAllCarsController,
   addCarController,
   getCarByIdController,
+  updateCarController,
+  deleteCarController,
 };
