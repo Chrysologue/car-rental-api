@@ -172,7 +172,7 @@ const deleteCarController = async (req, res) => {
     }
 
     return res
-      .status(204)
+      .status(200)
       .json({ success: true, message: 'Car successfully deleted!' });
   } catch (error) {
     console.error(`Error in deleteCarController: ${error.message}`);
