@@ -578,72 +578,164 @@
         "make",
         "model",
         "year",
-        "dailyPrice",
-        "locationId"
+        "licensePlate",
+        "color",
+        "seats",
+        "mileage",
+        "location",
+        "pricePerDay"
       ],
       "properties": {
         "make": {
           "type": "string",
-          "example": "Toyota"
+          "example": "Toyota",
+          "description": "Car manufacturer/brand"
         },
         "model": {
           "type": "string",
-          "example": "Camry"
+          "example": "Camry",
+          "description": "Car model"
         },
         "year": {
           "type": "integer",
-          "example": 2023
-        },
-        "color": {
-          "type": "string",
-          "example": "White"
+          "example": 2023,
+          "minimum": 2000,
+          "maximum": 2026,
+          "description": "Manufacturing year (2000-present)"
         },
         "licensePlate": {
           "type": "string",
-          "example": "ABC-123"
+          "example": "ABC-123",
+          "description": "License plate number (must be unique)"
         },
         "type": {
           "type": "string",
-          "example": "Sedan"
+          "enum": [
+            "economy",
+            "compact",
+            "midsize",
+            "suv",
+            "van",
+            "luxury",
+            "sports"
+          ],
+          "example": "midsize",
+          "default": "midsize",
+          "description": "Car category/type"
         },
-        "fuelType": {
+        "color": {
           "type": "string",
-          "example": "Petrol"
-        },
-        "transmission": {
-          "type": "string",
-          "example": "Automatic"
+          "example": "White",
+          "description": "Car color"
         },
         "seats": {
           "type": "integer",
-          "example": 5
+          "example": 5,
+          "minimum": 2,
+          "maximum": 15,
+          "description": "Number of seats"
         },
-        "dailyPrice": {
-          "type": "number",
-          "example": 49.99
+        "transmission": {
+          "type": "string",
+          "enum": [
+            "automatic",
+            "manual"
+          ],
+          "example": "automatic",
+          "default": "automatic",
+          "description": "Transmission type"
+        },
+        "fuelType": {
+          "type": "string",
+          "enum": [
+            "gasoline",
+            "diesel",
+            "electric",
+            "hybrid"
+          ],
+          "example": "gasoline",
+          "default": "gasoline",
+          "description": "Type of fuel"
         },
         "mileage": {
           "type": "number",
-          "example": 15000
+          "example": 15000,
+          "minimum": 0,
+          "description": "Current mileage in km/miles"
         },
-        "available": {
-          "type": "boolean",
-          "example": true
+        "location": {
+          "type": "string",
+          "example": "507f1f77bcf86cd799439011",
+          "description": "Location ID where the car is available"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "available",
+            "rented",
+            "maintenance",
+            "unavailable"
+          ],
+          "example": "available",
+          "default": "available",
+          "description": "Current status of the car"
+        },
+        "pricePerDay": {
+          "type": "number",
+          "example": 49.99,
+          "minimum": 0,
+          "description": "Daily rental price"
         },
         "features": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "gps",
+              "bluetooth",
+              "backup-camera",
+              "sunroof",
+              "heated-seats",
+              "child-seat"
+            ]
+          },
+          "example": [
+            "gps",
+            "bluetooth",
+            "backup-camera"
+          ],
+          "description": "Car features and amenities"
+        },
+        "images": {
           "type": "array",
           "items": {
             "type": "string"
           },
           "example": [
-            "GPS",
-            "Bluetooth",
-            "Air Conditioning"
-          ]
+            "https://example.com/car1.jpg",
+            "https://example.com/car2.jpg"
+          ],
+          "description": "Array of image URLs for the car"
         },
-        "locationId": {
+        "description": {
           "type": "string",
-          "example": "507f1f77bcf86cd799439011"
+          "maxLength": 500,
+          "example": "A comfortable midsize sedan with modern features",
+          "description": "Description of the car"
+        },
+        "totalRentals": {
+          "type": "integer",
+          "example": 0,
+          "default": 0,
+          "description": "Total number of times this car has been rented"
+        },
+        "averageRating": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 5,
+          "example": 0,
+          "default": 0,
+          "description": "Average customer rating (0-5)"
         }
       }
     }
