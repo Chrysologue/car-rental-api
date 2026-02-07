@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
-    "swagger": "node ./swagger.js"
+    "swagger": "node ./swagger.js",
+    "build": "npm run swagger"
   },
   "repository": {
     "type": "git",
