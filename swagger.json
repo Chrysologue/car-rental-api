@@ -2,29 +2,86 @@
   "swagger": "2.0",
   "info": {
     "title": "Car rental API",
-    "description": "Description",
+    "description": "\n      A RESTful Car Rental API that allows users to register, authenticate, and rent cars\nfrom different locations. The system supports role-based access control with\nadmin and user roles. Admins can manage users and rental locations, while\nauthenticated users can browse locations and perform rental-related operations.\nAuthentication is handled using JWT Bearer tokens.\n    ",
     "version": "1.0.0"
   },
   "host": "localhost:4400",
-  "basePath": "/",
   "schemes": ["http"],
+  "securityDefinitions": {
+    "BearerAuth": {
+      "type": "apiKey",
+      "name": "authorization",
+      "in": "header",
+      "description": "Authorization needed, Enter: Bearer<token>"
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
   "paths": {
     "/": {
       "get": {
-        "description": "",
+        "description": "public Home",
+        "security": [],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Ok"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
     },
-    "/api/locations": {
-      "get": {
-        "description": "",
+    "/api/login": {
+      "post": {
+        "description": "Login",
+        "security": [],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": ["email", "password"],
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "User@example.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "Your password"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Success"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/users": {
+      "get": {
+        "description": "Get all user (admin only)",
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           },
           "500": {
             "description": "Internal Server Error"
@@ -32,12 +89,16 @@
         }
       },
       "post": {
-        "description": "",
+        "description": "Create user",
+        "security": [],
         "parameters": [
           {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
           }
         ],
         "responses": {
@@ -51,7 +112,154 @@
             "description": "Unauthorized"
           },
           "403": {
+            "description": "Forbidded"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/users/{id}": {
+      "get": {
+        "description": "Get user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidded"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "SUccess"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidded"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "description": "Update user user",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "SUccess"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidded"
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/locations": {
+      "get": {
+        "description": "Get all locations",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Ok"
+          }
+        }
+      },
+      "post": {
+        "description": "Create user (admin only)",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": "true",
+            "schema": {
+              "$ref": "#/definitions/Location"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "201": {
+            "description": "created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
             "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -61,48 +269,18 @@
     },
     "/api/locations/{id}": {
       "get": {
-        "description": "",
+        "description": "Get location by id",
+        "security": [],
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "required": true,
-            "type": "string"
+            "required": "true"
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "put": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
+            "description": "Success"
           },
           "400": {
             "description": "Bad Request"
@@ -114,7 +292,7 @@
             "description": "Forbidden"
           },
           "404": {
-            "description": "Not Found"
+            "description": "Not found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -122,23 +300,17 @@
         }
       },
       "delete": {
-        "description": "",
+        "description": "Delete location (admin only)",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
+            "required": "true"
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Success"
           },
           "400": {
             "description": "Bad Request"
@@ -150,80 +322,7 @@
             "description": "Forbidden"
           },
           "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/login": {
-      "post": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/users": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "post": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/users/{id}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
+            "description": "Not found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -231,57 +330,96 @@
         }
       },
       "put": {
-        "description": "",
+        "description": "Update location",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "required": true,
-            "type": "string"
+            "required": true
           },
           {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Location"
+            }
           }
         ],
         "responses": {
+          "200": {
+            "description": "Location updated"
+          },
           "401": {
             "description": "Unauthorized"
           },
           "403": {
             "description": "Forbidden"
           },
-          "500": {
-            "description": "Internal Server Error"
+          "404": {
+            "description": "Location not found"
           }
         }
-      },
-      "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+      }
+    }
+  },
+  "definitions": {
+    "Location": {
+      "type": "object",
+      "required": [
+        "name",
+        "address",
+        "country",
+        "city",
+        "contactNumber",
+        "email"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Yourname"
+        },
+        "address": {
+          "type": "string",
+          "example": "2-15 Shinjuku Avenue"
+        },
+        "country": {
+          "type": "string",
+          "example": "Japan"
+        },
+        "city": {
+          "type": "string",
+          "example": "Tokyo"
+        },
+        "contactNumber": {
+          "type": "string",
+          "example": "+81-3-5555-1122"
+        },
+        "email": {
+          "type": "string",
+          "example": "contact@tokyodrive.jp"
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "required": ["email", "name", "password", "role"],
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "User@example.com"
+        },
+        "name": {
+          "type": "string",
+          "example": "Yourname"
+        },
+        "password": {
+          "type": "string",
+          "example": "Your password"
+        },
+        "role": {
+          "type": "string",
+          "example": "user"
         }
       }
     }
