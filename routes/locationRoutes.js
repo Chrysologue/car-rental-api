@@ -16,22 +16,22 @@ router.get(
 //Only admin (checkAdmin)
 router.post(
   '/locations',
-  authMiddleware.verifyUser,
-  checkAdmin,
+  // authMiddleware.verifyUser,
+  // checkAdmin,
   utilities.handleAsyncError(locationController.createLocation),
 );
 //Only admin (checkAdmin)
 router.put(
   '/locations/:id',
-  authMiddleware.verifyUser,
-  checkAdmin,
+  // authMiddleware.verifyUser,
+  // checkAdmin,
   utilities.handleAsyncError(locationController.updateLocation),
 );
 //Only admin (checkAdmin)
 router.delete(
   '/locations/:id',
-  authMiddleware.verifyUser,
-  checkAdmin,
+  // authMiddleware.verifyUser,
+  // checkAdmin,
   utilities.handleAsyncError(locationController.deleteLocation),
 );
 
