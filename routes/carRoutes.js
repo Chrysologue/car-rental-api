@@ -6,13 +6,33 @@ const {
   updateCarController,
   deleteCarController,
 } = require('../controllers/carController.js');
+const {
+  mongoIdValidation,
+  handleValidationErrors,
+} = require('../middleware/validationMiddleware.js');
 
 const carRouter = Router();
 
 carRouter.get('/', getAllCarsController);
 carRouter.post('/', addCarController);
-carRouter.get('/:id', getCarByIdController);
-carRouter.put('/:id', updateCarController);
-carRouter.delete('/:id', deleteCarController);
+carRouter.get(
+  '/:id',
+  mongoIdValidation,
+  handleValidationErrors,
+  getCarByIdController,
+);
+carRouter.put(
+  '/:id',
+  mongoIdValidation,
+  handleValidationErrors,
+  updateCarController,
+);
+carRouter.delete(
+  '/:id',
+  mongoIdValidation,
+  handleValidationErrors,
+  handleValidationErrors,
+  deleteCarController,
+);
 
 module.exports = carRouter;
