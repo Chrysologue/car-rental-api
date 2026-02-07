@@ -8,18 +8,19 @@ const swaggerDocument = require('./swagger.json');
 const authRoute = require('./routes/authRoutes.js');
 
 const userRoutes = require('./routes/userRoutes.js');
+const carRouter = require('./routes/carRoutes.js');
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use('/api', locationRoute);
 app.use('/api', authRoute);
 app.use('/api', userRoutes);
 app.use('/api/bookings', bookingsRouter);
-
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api/cars', carRouter);
 
 app.get('/', (req, res) => {
   res.status(200).json({
