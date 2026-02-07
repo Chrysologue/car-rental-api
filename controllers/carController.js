@@ -20,6 +20,23 @@ const getAllCarsController = async (req, res) => {
   }
 };
 
+const getCarByIdController = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const car = await Car.findById(id);
+    if (!car) {
+      return res
+        .status(400)
+        .json({ success: false, message: 'Invalid request' });
+    }
+
+    return res.status(200).json({ success: true, data: car });
+  } catch (error) {
+    console.log(`Error in getCarByIdController: ${error}`);
+    return res.status(500).json('Internal Server error');
+  }
+};
+
 const addCarController = async (req, res) => {
   const {
     make,
@@ -78,4 +95,8 @@ const addCarController = async (req, res) => {
   }
 };
 
-module.exports = { getAllCarsController, addCarController };
+module.exports = {
+  getAllCarsController,
+  addCarController,
+  getCarByIdController,
+};
