@@ -6,9 +6,7 @@
     "version": "1.0.0"
   },
   "host": "localhost:3000",
-  "schemes": [
-    "http"
-  ],
+  "schemes": ["http"],
   "securityDefinitions": {
     "BearerAuth": {
       "type": "apiKey",
@@ -48,10 +46,7 @@
             "required": true,
             "schema": {
               "type": "object",
-              "required": [
-                "email",
-                "password"
-              ],
+              "required": ["email", "password"],
               "properties": {
                 "email": {
                   "type": "string",
@@ -488,7 +483,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Car deleted successfully"
           },
           "401": {
@@ -547,12 +542,7 @@
     },
     "User": {
       "type": "object",
-      "required": [
-        "email",
-        "name",
-        "password",
-        "role"
-      ],
+      "required": ["email", "name", "password", "role"],
       "properties": {
         "email": {
           "type": "string",
@@ -637,22 +627,14 @@
         },
         "transmission": {
           "type": "string",
-          "enum": [
-            "automatic",
-            "manual"
-          ],
+          "enum": ["automatic", "manual"],
           "example": "automatic",
           "default": "automatic",
           "description": "Transmission type"
         },
         "fuelType": {
           "type": "string",
-          "enum": [
-            "gasoline",
-            "diesel",
-            "electric",
-            "hybrid"
-          ],
+          "enum": ["gasoline", "diesel", "electric", "hybrid"],
           "example": "gasoline",
           "default": "gasoline",
           "description": "Type of fuel"
@@ -670,12 +652,7 @@
         },
         "status": {
           "type": "string",
-          "enum": [
-            "available",
-            "rented",
-            "maintenance",
-            "unavailable"
-          ],
+          "enum": ["available", "rented", "maintenance", "unavailable"],
           "example": "available",
           "default": "available",
           "description": "Current status of the car"
@@ -699,11 +676,7 @@
               "child-seat"
             ]
           },
-          "example": [
-            "gps",
-            "bluetooth",
-            "backup-camera"
-          ],
+          "example": ["gps", "bluetooth", "backup-camera"],
           "description": "Car features and amenities"
         },
         "images": {
