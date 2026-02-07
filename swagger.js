@@ -1,4 +1,3 @@
-// const swaggerAutogen = require('swagger-autogen')();
 require('dotenv').config();
 const isProd = process.env.NODE_ENV === 'production';
 const fs = require('fs');
@@ -232,6 +231,98 @@ Authentication is handled using JWT Bearer tokens.
         },
       },
     },
+    // ================== CARS ENDPOINTS ==================
+    '/api/cars': {
+      get: {
+        description: 'Get all cars',
+        security: [],
+        responses: {
+          200: { description: 'Success' },
+          500: { description: 'Internal Server Error' },
+        },
+      },
+      post: {
+        description: 'Create a new car (admin only)',
+        parameters: [
+          {
+            name: 'body',
+            in: 'body',
+            required: true,
+            schema: { $ref: '#/definitions/Car' },
+          },
+        ],
+        responses: {
+          201: { description: 'Car created successfully' },
+          400: { description: 'Bad Request' },
+          401: { description: 'Unauthorized' },
+          403: { description: 'Forbidden - Admin access required' },
+          500: { description: 'Internal Server Error' },
+        },
+      },
+    },
+    '/api/cars/{id}': {
+      get: {
+        description: 'Get car by ID',
+        security: [],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            type: 'string',
+          },
+        ],
+        responses: {
+          200: { description: 'Success' },
+          400: { description: 'Bad Request' },
+          404: { description: 'Car not found' },
+          500: { description: 'Internal Server Error' },
+        },
+      },
+      put: {
+        description: 'Update car (admin only)',
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            type: 'string',
+          },
+          {
+            name: 'body',
+            in: 'body',
+            required: true,
+            schema: { $ref: '#/definitions/Car' },
+          },
+        ],
+        responses: {
+          200: { description: 'Car updated successfully' },
+          400: { description: 'Bad Request' },
+          401: { description: 'Unauthorized' },
+          403: { description: 'Forbidden - Admin access required' },
+          404: { description: 'Car not found' },
+          500: { description: 'Internal Server Error' },
+        },
+      },
+      delete: {
+        description: 'Delete car (admin only)',
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            type: 'string',
+          },
+        ],
+        responses: {
+          200: { description: 'Car deleted successfully' },
+          401: { description: 'Unauthorized' },
+          403: { description: 'Forbidden - Admin access required' },
+          404: { description: 'Car not found' },
+          500: { description: 'Internal Server Error' },
+        },
+      },
+    },
   },
   definitions: {
     Location: {
@@ -263,15 +354,159 @@ Authentication is handled using JWT Bearer tokens.
         role: { type: 'string', example: 'user' },
       },
     },
+    // ================== CAR DEFINITION ==================
+    Car: {
+      type: 'object',
+      required: [
+        'make',
+        'model',
+        'year',
+        'licensePlate',
+        'color',
+        'seats',
+        'mileage',
+        'location',
+        'pricePerDay',
+      ],
+      properties: {
+        make: {
+          type: 'string',
+          example: 'Toyota',
+          description: 'Car manufacturer/brand',
+        },
+        model: {
+          type: 'string',
+          example: 'Camry',
+          description: 'Car model',
+        },
+        year: {
+          type: 'integer',
+          example: 2023,
+          minimum: 2000,
+          maximum: 2026,
+          description: 'Manufacturing year (2000-present)',
+        },
+        licensePlate: {
+          type: 'string',
+          example: 'ABC-123',
+          description: 'License plate number (must be unique)',
+        },
+        type: {
+          type: 'string',
+          enum: [
+            'economy',
+            'compact',
+            'midsize',
+            'suv',
+            'van',
+            'luxury',
+            'sports',
+          ],
+          example: 'midsize',
+          default: 'midsize',
+          description: 'Car category/type',
+        },
+        color: {
+          type: 'string',
+          example: 'White',
+          description: 'Car color',
+        },
+        seats: {
+          type: 'integer',
+          example: 5,
+          minimum: 2,
+          maximum: 15,
+          description: 'Number of seats',
+        },
+        transmission: {
+          type: 'string',
+          enum: ['automatic', 'manual'],
+          example: 'automatic',
+          default: 'automatic',
+          description: 'Transmission type',
+        },
+        fuelType: {
+          type: 'string',
+          enum: ['gasoline', 'diesel', 'electric', 'hybrid'],
+          example: 'gasoline',
+          default: 'gasoline',
+          description: 'Type of fuel',
+        },
+        mileage: {
+          type: 'number',
+          example: 15000,
+          minimum: 0,
+          description: 'Current mileage in km/miles',
+        },
+        location: {
+          type: 'string',
+          example: '507f1f77bcf86cd799439011',
+          description: 'Location ID where the car is available',
+        },
+        status: {
+          type: 'string',
+          enum: ['available', 'rented', 'maintenance', 'unavailable'],
+          example: 'available',
+          default: 'available',
+          description: 'Current status of the car',
+        },
+        pricePerDay: {
+          type: 'number',
+          example: 49.99,
+          minimum: 0,
+          description: 'Daily rental price',
+        },
+        features: {
+          type: 'array',
+          items: {
+            type: 'string',
+            enum: [
+              'gps',
+              'bluetooth',
+              'backup-camera',
+              'sunroof',
+              'heated-seats',
+              'child-seat',
+            ],
+          },
+          example: ['gps', 'bluetooth', 'backup-camera'],
+          description: 'Car features and amenities',
+        },
+        images: {
+          type: 'array',
+          items: {
+            type: 'string',
+          },
+          example: [
+            'https://example.com/car1.jpg',
+            'https://example.com/car2.jpg',
+          ],
+          description: 'Array of image URLs for the car',
+        },
+        description: {
+          type: 'string',
+          maxLength: 500,
+          example: 'A comfortable midsize sedan with modern features',
+          description: 'Description of the car',
+        },
+        totalRentals: {
+          type: 'integer',
+          example: 0,
+          default: 0,
+          description: 'Total number of times this car has been rented',
+        },
+        averageRating: {
+          type: 'number',
+          minimum: 0,
+          maximum: 5,
+          example: 0,
+          default: 0,
+          description: 'Average customer rating (0-5)',
+        },
+      },
+    },
   },
 };
 
 fs.writeFileSync('./swagger.json', JSON.stringify(doc, null, 2));
 console.log('✅ Success');
-// const outputFile = './swagger.json';
-// const routes = ['server.js'];
-
-/* NOTE: If you are using the express Router, you must pass in the 'routes' only the 
-root file where the route starts, such as index.js, app.js, routes.js, etc ... */
-
-// swaggerAutogen(outputFile, routes, doc);

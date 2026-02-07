@@ -118,6 +118,11 @@ const carSchema = new mongoose.Schema(
       max: 5,
       default: 0,
     },
+    location: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Location',
+      required: [true, 'Car must have location'],
+    },
   },
   {
     timestamps: true,

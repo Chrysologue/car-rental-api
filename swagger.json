@@ -2,11 +2,13 @@
   "swagger": "2.0",
   "info": {
     "title": "Car rental API",
-    "description": "\n      A RESTful Car Rental API that allows users to register, authenticate, and rent cars\nfrom different locations. The system supports role-based access control with\nadmin and user roles. Admins can manage users and rental locations, while\nauthenticated users can browse locations and perform rental-related operations.\nAuthentication is handled using JWT Bearer tokens.\n    ",
+    "description": "\nA RESTful Car Rental API that allows users to register, authenticate, and rent cars\nfrom different locations. The system supports role-based access control with\nadmin and user roles. Admins can manage users and rental locations, while\nauthenticated users can browse locations and perform rental-related operations.\nAuthentication is handled using JWT Bearer tokens.\n    ",
     "version": "1.0.0"
   },
-  "host": "localhost:4400",
-  "schemes": ["http"],
+  "host": "localhost:3000",
+  "schemes": [
+    "http"
+  ],
   "securityDefinitions": {
     "BearerAuth": {
       "type": "apiKey",
@@ -46,7 +48,10 @@
             "required": true,
             "schema": {
               "type": "object",
-              "required": ["email", "password"],
+              "required": [
+                "email",
+                "password"
+              ],
               "properties": {
                 "email": {
                   "type": "string",
@@ -361,6 +366,145 @@
           }
         }
       }
+    },
+    "/api/cars": {
+      "get": {
+        "description": "Get all cars",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "description": "Create a new car (admin only)",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Car"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Car created successfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - Admin access required"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/cars/{id}": {
+      "get": {
+        "description": "Get car by ID",
+        "security": [],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Car not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "description": "Update car (admin only)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Car"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Car updated successfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - Admin access required"
+          },
+          "404": {
+            "description": "Car not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete car (admin only)",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Car deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - Admin access required"
+          },
+          "404": {
+            "description": "Car not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -403,7 +547,12 @@
     },
     "User": {
       "type": "object",
-      "required": ["email", "name", "password", "role"],
+      "required": [
+        "email",
+        "name",
+        "password",
+        "role"
+      ],
       "properties": {
         "email": {
           "type": "string",
@@ -423,65 +572,170 @@
         }
       }
     },
-    "/api/bookings/": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
+    "Car": {
+      "type": "object",
+      "required": [
+        "make",
+        "model",
+        "year",
+        "licensePlate",
+        "color",
+        "seats",
+        "mileage",
+        "location",
+        "pricePerDay"
+      ],
+      "properties": {
+        "make": {
+          "type": "string",
+          "example": "Toyota",
+          "description": "Car manufacturer/brand"
+        },
+        "model": {
+          "type": "string",
+          "example": "Camry",
+          "description": "Car model"
+        },
+        "year": {
+          "type": "integer",
+          "example": 2023,
+          "minimum": 2000,
+          "maximum": 2026,
+          "description": "Manufacturing year (2000-present)"
+        },
+        "licensePlate": {
+          "type": "string",
+          "example": "ABC-123",
+          "description": "License plate number (must be unique)"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "economy",
+            "compact",
+            "midsize",
+            "suv",
+            "van",
+            "luxury",
+            "sports"
+          ],
+          "example": "midsize",
+          "default": "midsize",
+          "description": "Car category/type"
+        },
+        "color": {
+          "type": "string",
+          "example": "White",
+          "description": "Car color"
+        },
+        "seats": {
+          "type": "integer",
+          "example": 5,
+          "minimum": 2,
+          "maximum": 15,
+          "description": "Number of seats"
+        },
+        "transmission": {
+          "type": "string",
+          "enum": [
+            "automatic",
+            "manual"
+          ],
+          "example": "automatic",
+          "default": "automatic",
+          "description": "Transmission type"
+        },
+        "fuelType": {
+          "type": "string",
+          "enum": [
+            "gasoline",
+            "diesel",
+            "electric",
+            "hybrid"
+          ],
+          "example": "gasoline",
+          "default": "gasoline",
+          "description": "Type of fuel"
+        },
+        "mileage": {
+          "type": "number",
+          "example": 15000,
+          "minimum": 0,
+          "description": "Current mileage in km/miles"
+        },
+        "location": {
+          "type": "string",
+          "example": "507f1f77bcf86cd799439011",
+          "description": "Location ID where the car is available"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "available",
+            "rented",
+            "maintenance",
+            "unavailable"
+          ],
+          "example": "available",
+          "default": "available",
+          "description": "Current status of the car"
+        },
+        "pricePerDay": {
+          "type": "number",
+          "example": 49.99,
+          "minimum": 0,
+          "description": "Daily rental price"
+        },
+        "features": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "gps",
+              "bluetooth",
+              "backup-camera",
+              "sunroof",
+              "heated-seats",
+              "child-seat"
+            ]
           },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "car": {
-                  "example": "any"
-                },
-                "pickupLocation": {
-                  "example": "any"
-                },
-                "returnLocation": {
-                  "example": "any"
-                },
-                "pickupDate": {
-                  "example": "any"
-                },
-                "returnDate": {
-                  "example": "any"
-                },
-                "duration": {
-                  "example": "any"
-                },
-                "dailyRate": {
-                  "example": "any"
-                },
-                "totalAmount": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created"
+          "example": [
+            "gps",
+            "bluetooth",
+            "backup-camera"
+          ],
+          "description": "Car features and amenities"
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "type": "string"
           },
-          "400": {
-            "description": "Bad Request"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "example": [
+            "https://example.com/car1.jpg",
+            "https://example.com/car2.jpg"
+          ],
+          "description": "Array of image URLs for the car"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 500,
+          "example": "A comfortable midsize sedan with modern features",
+          "description": "Description of the car"
+        },
+        "totalRentals": {
+          "type": "integer",
+          "example": 0,
+          "default": 0,
+          "description": "Total number of times this car has been rented"
+        },
+        "averageRating": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 5,
+          "example": 0,
+          "default": 0,
+          "description": "Average customer rating (0-5)"
         }
       }
     }
