@@ -31,7 +31,6 @@ carRouter.delete(
   '/:id',
   mongoIdValidation,
   handleValidationErrors,
-  handleValidationErrors,
   deleteCarController,
 );
 
