@@ -1,10 +1,37 @@
-const express = require('express');
-const router = express.Router();
-const carsController = require('../controllers/cars');
+const { Router } = require('express');
+const {
+  getAllCarsController,
+  addCarController,
+  getCarByIdController,
+  updateCarController,
+  deleteCarController,
+} = require('../controllers/carController.js');
+const {
+  mongoIdValidation,
+  handleValidationErrors,
+} = require('../middleware/validationMiddleware.js');
 
-router.get('/', carsController.getAllCars);
-router.post('/', carsController.createCar);
-router.put('/:id', carsController.updateCar);
-router.delete('/:id', carsController.deleteCar);
+const carRouter = Router();
 
-module.exports = router;
+carRouter.get('/', getAllCarsController);
+carRouter.post('/', addCarController);
+carRouter.get(
+  '/:id',
+  mongoIdValidation,
+  handleValidationErrors,
+  getCarByIdController,
+);
+carRouter.put(
+  '/:id',
+  mongoIdValidation,
+  handleValidationErrors,
+  updateCarController,
+);
+carRouter.delete(
+  '/:id',
+  mongoIdValidation,
+  handleValidationErrors,
+  deleteCarController,
+);
+
+module.exports = carRouter;
