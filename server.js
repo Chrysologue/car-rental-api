@@ -1,36 +1,49 @@
-const bookingsRouter = require('./routes/bookingRoutes.js');
-const { connectToDB } = require('./config/database.js');
-const locationRoute = require('./routes/locationRoutes.js');
 const express = require('express');
 const dotenv = require('dotenv');
+const cors = require('cors'); // 1. Import CORS
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
-const authRoute = require('./routes/authRoutes.js');
 
-const userRoutes = require('./routes/userRoutes.js');
+// Routers
 const carRouter = require('./routes/carRoutes.js');
+const bookingsRouter = require('./routes/bookingRoutes.js');
+const locationRouter = require('./routes/locationRoutes.js');
+const authRouter = require('./routes/authRoutes.js');
+const userRouter = require('./routes/userRoutes.js');
+
+// Database
+const { connectToDB } = require('./config/database.js');
 
 dotenv.config();
-
 const app = express();
+
+// Middleware
+app.use(cors()); // 2. Enable CORS for all origins
 app.use(express.json());
+
+// Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.use('/api', locationRoute);
-app.use('/api', authRoute);
-app.use('/api', userRoutes);
-app.use('/api/bookings', bookingsRouter);
+// Routes
 app.use('/api/cars', carRouter);
+app.use('/api/bookings', bookingsRouter);
+app.use('/api/locations', locationRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/users', userRouter);
 
+// Root
 app.get('/', (req, res) => {
   res.status(200).json({
     message: 'Welcome to Car Rental API',
-    api_docs: 'https://car-rental-api-d7zw.onrender.com/api-docs',
+    api_docs: `${req.protocol}://${req.get('host')}/api-docs`,
   });
 });
 
-const port = process.env.PORT || 3000;
-
-connectToDB().then(() => {
-  app.listen(port, () => console.log('Listening on port', port));
-});
+// Start server
+const PORT = process.env.PORT || 4400;
+connectToDB()
+  .then(() => {
+    console.log('Connected to MongoDB');
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  })
+  .catch((err) => console.error('DB connection error:', err));
