@@ -1,36 +1,53 @@
-const bcrypt = require('bcryptjs');
+// const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/userModel');
+// const User = require('../models/userModel');
 require('dotenv').config();
 
 const Auth = {};
 
-Auth.login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email }).select('+password');
-    if (!user) {
-      return res.status(400).json({ error: 'Invalid credentials' });
-    }
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ error: 'Invalid credentials' });
-    }
+// Auth.login = async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
+//     const user = await User.findOne({ email }).select('+password');
+//     if (!user) {
+//       return res.status(400).json({ error: 'Invalid credentials' });
+//     }
+//     const isMatch = await bcrypt.compare(password, user.password);
+//     if (!isMatch) {
+//       return res.status(400).json({ error: 'Invalid credentials' });
+//     }
 
-    const userData = {
-      id: user._id,
-      email: user.email,
-      name: user.name,
-      role: user.role,
+//     const userData = {
+//       id: user._id,
+//       email: user.email,
+//       name: user.name,
+//       role: user.role,
+//     };
+//     console.log(userData);
+//     const accessToken = jwt.sign(userData, process.env.JWT_TOKEN, {
+//       expiresIn: '2h',
+//     });
+//     res.status(200).json({ accessToken });
+//   } catch (e) {
+//     console.error(e.message);
+//     res.status(500).json({ error: 'Internal server error' });
+//   }
+// };
+
+Auth.generateToken = async function (req, res) {
+  try {
+    const payload = {
+      id: req.user._id,
+      role: req.user.role,
     };
-    console.log(userData);
-    const accessToken = jwt.sign(userData, process.env.JWT_TOKEN, {
-      expiresIn: '2h',
+
+    const accessToken = jwt.sign(payload, process.env.JWT_TOKEN, {
+      expiresIn: '1h',
     });
     res.status(200).json({ accessToken });
-  } catch (e) {
-    console.error(e.message);
-    res.status(500).json({ error: 'Internal server error' });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: 'Internal server error' });
   }
 };
 

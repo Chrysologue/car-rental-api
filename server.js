@@ -6,6 +6,8 @@ const dotenv = require('dotenv');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 const authRoute = require('./routes/authRoutes.js');
+const passport = require('passport');
+require('./config/passport.js');
 
 const userRoutes = require('./routes/userRoutes.js');
 const carRouter = require('./routes/carRoutes.js');
@@ -14,6 +16,7 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
+app.use(passport.initialize());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use('/api', locationRoute);
