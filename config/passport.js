@@ -17,7 +17,7 @@ passport.use(
       try {
         const ADMIN_EMAILS = [
           'chrysorx@gmail.com',
-          'ajaxmilton@hotmail.com',
+          'mieltonkumirai@gmail.com',
           'antonyochieng00@gmail.com',
           'makindeoluwatobiloba4@gmail.com',
         ];
