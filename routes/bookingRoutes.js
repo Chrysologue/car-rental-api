@@ -30,16 +30,16 @@ bookingRouter.get(
 
 bookingRouter.post(
   '/',
+  authMiddleware.verifyUser,
   addBookingValidation,
   handleValidationErrors,
-  authMiddleware.verifyUser,
   addBookingController,
 );
 
 bookingRouter.put(
   '/:id',
-  mongoIdValidation,
   authMiddleware.verifyUser,
+  mongoIdValidation,
   addBookingValidation,
   handleValidationErrors,
   addBookingController,
@@ -47,8 +47,8 @@ bookingRouter.put(
 
 bookingRouter.delete(
   '/:id',
-  mongoIdValidation,
   authMiddleware.verifyUser,
+  mongoIdValidation,
   addBookingValidation,
   handleValidationErrors,
   deleteBookingController,
