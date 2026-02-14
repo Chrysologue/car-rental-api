@@ -58,6 +58,11 @@ const carSchema = new mongoose.Schema(
       default: 'gasoline',
     },
 
+    isBooked: {
+      type: Boolean,
+      default: false,
+    },
+
     mileage: {
       type: Number,
       required: true,
@@ -81,6 +86,18 @@ const carSchema = new mongoose.Schema(
       required: [true, 'Daily price is required'],
       min: [0, 'Price cannot be negative'],
     },
+
+    bookings: [
+      {
+        bookingId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Booking',
+        },
+        startDate: Date,
+        endDate: Date,
+        status: String,
+      },
+    ],
 
     features: [
       {
@@ -128,6 +145,8 @@ const carSchema = new mongoose.Schema(
     timestamps: true,
   },
 );
+
+carSchema.index({ 'bookings.startDate': 1, 'bookings.endDate': 1 });
 
 const Car = mongoose.model('Car', carSchema);
 
