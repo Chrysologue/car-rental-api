@@ -26,10 +26,29 @@ app.use('/api/bookings', bookingsRouter);
 app.use('/api/cars', carRouter);
 
 app.get('/', (req, res) => {
-  res.status(200).json({
-    message: 'Welcome to Car Rental API',
-    api_docs: 'https://car-rental-api-d7zw.onrender.com/api-docs',
-  });
+  res.send(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Car Rental API</title>
+    </head>
+    <body>
+      <h1>Welcome to Car Rental API</h1>
+      <p>
+        API Documentation: 
+        <a href="https://car-rental-api-d7zw.onrender.com/api-docs" target="_blank">
+          https://car-rental-api-d7zw.onrender.com/api-docs
+        </a>
+      </p>
+      <p>
+       OAuth: 
+        <a href="https://car-rental-api-d7zw.onrender.com/api/auth/google" target="_blank">
+         Log In With Google
+        </a>
+      </p>
+    </body>
+    </html>
+  `);
 });
 
 const port = process.env.PORT || 3000;
