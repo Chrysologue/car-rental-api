@@ -89,57 +89,57 @@ All protected routes require a JWT token in the Authorization header:
       },
     },
     // ================== AUTHENTICATION ENDPOINTS ==================
-    '/auth/login': {
-      get: {
-        tags: ['Authentication'],
-        summary: 'Google OAuth Login',
-        description: 'Initiate Google OAuth login flow',
-        security: [], // Public route (no padlock)
-        responses: {
-          302: {
-            description: 'Redirect to Google OAuth consent screen',
-            headers: {
-              Location: {
-                description: 'Google OAuth URL',
-                type: 'string',
-              },
-            },
-          },
-        },
-      },
-    },
-    '/auth/google/callback': {
-      get: {
-        tags: ['Authentication'],
-        summary: 'Google OAuth Callback',
-        description:
-          'Google OAuth callback endpoint - returns JWT token on success',
-        security: [], // Public route (no padlock)
-        responses: {
-          200: {
-            description: 'Authentication successful - returns JWT token',
-            schema: {
-              type: 'object',
-              properties: {
-                success: { type: 'boolean' },
-                token: { type: 'string' },
-                user: {
-                  type: 'object',
-                  properties: {
-                    _id: { type: 'string' },
-                    email: { type: 'string' },
-                    name: { type: 'string' },
-                    role: { type: 'string' },
-                  },
-                },
-              },
-            },
-          },
-          401: { description: 'Authentication failed' },
-          500: { description: 'Internal Server Error' },
-        },
-      },
-    },
+    // '/auth/login': {
+    //   get: {
+    //     tags: ['Authentication'],
+    //     summary: 'Google OAuth Login',
+    //     description: 'Initiate Google OAuth login flow',
+    //     security: [], // Public route (no padlock)
+    //     responses: {
+    //       302: {
+    //         description: 'Redirect to Google OAuth consent screen',
+    //         headers: {
+    //           Location: {
+    //             description: 'Google OAuth URL',
+    //             type: 'string',
+    //           },
+    //         },
+    //       },
+    //     },
+    //   },
+    // },
+    // '/auth/google/callback': {
+    //   get: {
+    //     tags: ['Authentication'],
+    //     summary: 'Google OAuth Callback',
+    //     description:
+    //       'Google OAuth callback endpoint - returns JWT token on success',
+    //     security: [], // Public route (no padlock)
+    //     responses: {
+    //       200: {
+    //         description: 'Authentication successful - returns JWT token',
+    //         schema: {
+    //           type: 'object',
+    //           properties: {
+    //             success: { type: 'boolean' },
+    //             token: { type: 'string' },
+    //             user: {
+    //               type: 'object',
+    //               properties: {
+    //                 _id: { type: 'string' },
+    //                 email: { type: 'string' },
+    //                 name: { type: 'string' },
+    //                 role: { type: 'string' },
+    //               },
+    //             },
+    //           },
+    //         },
+    //       },
+    //       401: { description: 'Authentication failed' },
+    //       500: { description: 'Internal Server Error' },
+    //     },
+    //   },
+    // },
     // ================== USER ENDPOINTS ==================
     '/users': {
       get: {
