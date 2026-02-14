@@ -160,28 +160,28 @@ All protected routes require a JWT token in the Authorization header:
           500: { description: 'Internal Server Error' },
         },
       },
-      post: {
-        tags: ['Users'],
-        summary: 'Create user',
-        description: 'Create a new user (Public)',
-        security: [], // Public route (no padlock)
-        parameters: [
-          {
-            name: 'body',
-            in: 'body',
-            required: true,
-            schema: { $ref: '#/definitions/UserInput' },
-          },
-        ],
-        responses: {
-          201: {
-            description: 'User created successfully',
-            schema: { $ref: '#/definitions/User' },
-          },
-          400: { description: 'Bad Request - Invalid input data' },
-          500: { description: 'Internal Server Error' },
-        },
-      },
+      // post: {
+      //   tags: ['Users'],
+      //   summary: 'Create user',
+      //   description: 'Create a new user (Public)',
+      //   security: [], // Public route (no padlock)
+      //   parameters: [
+      //     {
+      //       name: 'body',
+      //       in: 'body',
+      //       required: true,
+      //       schema: { $ref: '#/definitions/UserInput' },
+      //     },
+      //   ],
+      //   responses: {
+      //     201: {
+      //       description: 'User created successfully',
+      //       schema: { $ref: '#/definitions/User' },
+      //     },
+      //     400: { description: 'Bad Request - Invalid input data' },
+      //     500: { description: 'Internal Server Error' },
+      //   },
+      // },
     },
     '/users/{id}': {
       get: {
