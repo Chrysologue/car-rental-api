@@ -54,7 +54,13 @@ locationCont.updateLocation = async function (req, res) {
     if (!updatedLocation) {
       return res.status(404).json({ error: 'Location not found' });
     }
-    res.status(200).json(updatedLocation);
+    res
+      .status(200)
+      .json({
+        success: true,
+        message: 'Location upated successfully',
+        updatedLocation,
+      });
   } catch (e) {
     console.error(e.message);
     res.status(500).json({ error: 'Internal server error' });
