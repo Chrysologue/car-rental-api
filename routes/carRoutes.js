@@ -1,4 +1,7 @@
 const { Router } = require('express');
+const authMiddleware = require('../middleware/authMiddleware');
+const { checkAdmin } = require('../middleware/adminMiddleware');
+
 const {
   getAllCarsController,
   addCarController,
@@ -14,22 +17,37 @@ const {
 const carRouter = Router();
 
 carRouter.get('/', getAllCarsController);
-carRouter.post('/', addCarController);
+
+carRouter.post(
+  '/',
+  authMiddleware.verifyUser,
+  checkAdmin,
+  mongoIdValidation,
+  handleValidationErrors,
+  updateCarController,
+  addCarController,
+);
 carRouter.get(
   '/:id',
   mongoIdValidation,
   handleValidationErrors,
   getCarByIdController,
 );
+
 carRouter.put(
   '/:id',
+  authMiddleware.verifyUser,
+  checkAdmin,
   mongoIdValidation,
   handleValidationErrors,
   updateCarController,
 );
+
 carRouter.delete(
   '/:id',
+  authMiddleware.verifyUser,
   mongoIdValidation,
+  checkAdmin,
   handleValidationErrors,
   deleteCarController,
 );
