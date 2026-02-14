@@ -11,6 +11,8 @@ const {
   getAllBookingsController,
   addBookingController,
   getGetBookingByIdController,
+  deleteBookingController,
+  updateBookingController,
 } = require('../controllers/bookingController');
 
 const bookingRouter = Router();
@@ -49,7 +51,7 @@ bookingRouter.delete(
   authMiddleware.verifyUser,
   addBookingValidation,
   handleValidationErrors,
-  addBookingController,
+  deleteBookingController,
 );
 
 module.exports = bookingRouter;

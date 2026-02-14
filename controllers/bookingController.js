@@ -119,6 +119,7 @@ const deleteBookingController = async (req, res) => {
   const { id } = req.params;
   try {
     const booking = await Booking.findByIdAndDelete(id);
+    console.log(booking);
 
     if (!booking) {
       return res
@@ -128,7 +129,7 @@ const deleteBookingController = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: 'Booking successfully cancelled!',
+      message: 'Booking successfully deleted!',
       data: booking,
     });
   } catch (error) {
