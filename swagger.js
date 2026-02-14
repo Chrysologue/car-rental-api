@@ -76,18 +76,18 @@ All protected routes require a JWT token in the Authorization header:
   ],
   paths: {
     // ================== PUBLIC ENDPOINTS ==================
-    '/': {
-      get: {
-        tags: ['Public'],
-        summary: 'Home endpoint',
-        description: 'Public home endpoint',
-        security: [], // Override global security - this route is public (no padlock)
-        responses: {
-          200: { description: 'OK' },
-          500: { description: 'Internal Server Error' },
-        },
-      },
-    },
+    // '/': {
+    //   get: {
+    //     tags: ['Public'],
+    //     summary: 'Home endpoint',
+    //     description: 'Public home endpoint',
+    //     security: [], // Override global security - this route is public (no padlock)
+    //     responses: {
+    //       200: { description: 'OK' },
+    //       500: { description: 'Internal Server Error' },
+    //     },
+    //   },
+    // },
     // ================== AUTHENTICATION ENDPOINTS ==================
     // '/auth/login': {
     //   get: {
