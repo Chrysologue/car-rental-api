@@ -49,10 +49,10 @@ All protected routes require a JWT token in the Authorization header:
   ],
 
   tags: [
-    {
-      name: 'Authentication',
-      description: 'Authentication endpoints (Google OAuth) - Public',
-    },
+    // {
+    //   name: 'Authentication',
+    //   description: 'Authentication endpoints (Google OAuth) - Public',
+    // },
     {
       name: 'Users',
       description: 'User management endpoints',

@@ -25,10 +25,6 @@
   ],
   "tags": [
     {
-      "name": "Authentication",
-      "description": "Authentication endpoints (Google OAuth) - Public"
-    },
-    {
       "name": "Users",
       "description": "User management endpoints"
     },
