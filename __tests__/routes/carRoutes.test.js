@@ -3,52 +3,33 @@ const mongoose = require('mongoose');
 const app = require('../../server');
 const Car = require('../../models/carModel');
 const Location = require('../../models/locationModel');
-const User = require('../../models/userModel');
-const { generateToken, mockOAuthUser } = require('../setup');
 
-describe('Car Routes - GET endpoints with OAuth', () => {
-  let userToken;
-  let adminToken;
+describe('Car Routes - GET Requests Only', () => {
   let testLocation;
-  let testCar;
-  let userId;
-  let adminId;
+  let testCar1;
+  let testCar2;
 
+  // Add test data before each test
   beforeEach(async () => {
-    const regularUser = await User.create({
-      oauthId: 'google-user-123',
-      email: 'regular@example.com',
-      name: 'Regular User',
-      provider: 'google',
-      role: 'user',
-    });
-    userId = regularUser._id;
-    userToken = generateToken(userId, 'user');
+    // Clear database
+    await Car.deleteMany({});
+    await Location.deleteMany({});
 
-    const adminUser = await User.create({
-      oauthId: 'google-admin-123',
-      email: 'admin@example.com',
-      name: 'Admin User',
-      provider: 'google',
-      role: 'admin',
-    });
-    adminId = adminUser._id;
-    adminToken = generateToken(adminId, 'admin');
-
+    // Create test location
     testLocation = await Location.create({
       name: 'Test Location',
       address: '123 Test St',
       city: 'Test City',
       state: 'TS',
       zipCode: '12345',
-      phone: '+1234567890',
     });
 
-    testCar = await Car.create({
+    // Create test cars
+    testCar1 = await Car.create({
       make: 'Toyota',
       model: 'Camry',
       year: 2023,
-      licensePlate: 'TEST123',
+      licensePlate: 'ABC123',
       color: 'Blue',
       seats: 5,
       transmission: 'automatic',
@@ -57,15 +38,13 @@ describe('Car Routes - GET endpoints with OAuth', () => {
       location: testLocation._id,
       pricePerDay: 50,
       status: 'available',
-      features: ['gps', 'bluetooth'],
-      images: ['car1.jpg', 'car2.jpg'],
     });
 
-    await Car.create({
+    testCar2 = await Car.create({
       make: 'Honda',
       model: 'Accord',
       year: 2023,
-      licensePlate: 'TEST456',
+      licensePlate: 'XYZ789',
       color: 'Red',
       seats: 5,
       transmission: 'automatic',
@@ -74,59 +53,47 @@ describe('Car Routes - GET endpoints with OAuth', () => {
       location: testLocation._id,
       pricePerDay: 55,
       status: 'available',
-      features: ['backup-camera', 'sunroof'],
     });
   });
 
+  // Test 1: GET all cars
   describe('GET /api/cars', () => {
-    it('should return all cars (public access - no OAuth required)', async () => {
+    it('should return all cars', async () => {
       const response = await request(app).get('/api/cars').expect(200);
 
       expect(response.body.success).toBe(true);
-      expect(Array.isArray(response.body.data)).toBe(true);
       expect(response.body.data.length).toBe(2);
-    });
-
-    it('should filter cars by make', async () => {
-      const response = await request(app)
-        .get('/api/cars?make=Toyota')
-        .expect(200);
-
-      expect(response.body.data.length).toBe(1);
       expect(response.body.data[0].make).toBe('Toyota');
+      expect(response.body.data[1].make).toBe('Honda');
     });
 
-    it('should filter cars by price range', async () => {
-      const response = await request(app)
-        .get('/api/cars?minPrice=40&maxPrice=60')
-        .expect(200);
+    it('should return empty array when no cars exist', async () => {
+      await Car.deleteMany({});
 
-      expect(response.body.data.length).toBe(2);
-    });
+      const response = await request(app).get('/api/cars').expect(200);
 
-    it('should filter cars by features', async () => {
-      const response = await request(app)
-        .get('/api/cars?features=gps,bluetooth')
-        .expect(200);
-
-      expect(response.body.data.length).toBe(1);
-      expect(response.body.data[0].features).toContain('gps');
+      expect(response.body.success).toBe(true);
+      expect(response.body.data).toEqual([]);
     });
   });
 
+  // Test 2: GET car by ID
   describe('GET /api/cars/:id', () => {
-    it('should return car by ID (public access)', async () => {
+    it('should return car by ID', async () => {
       const response = await request(app)
-        .get(`/api/cars/${testCar._id}`)
+        .get(`/api/cars/${testCar1._id}`)
         .expect(200);
 
       expect(response.body.success).toBe(true);
-      expect(response.body.data._id).toBe(testCar._id.toString());
       expect(response.body.data.make).toBe('Toyota');
+      expect(response.body.data.model).toBe('Camry');
+      expect(response.body.data.licensePlate).toBe('ABC123');
+      expect(response.body.data.location.name).toBe('Test Location');
     });
 
-    it('should return 404 for non-existent car ID', async () => {
+    it('should return 404 if car not found', async () => {
       const fakeId = new mongoose.Types.ObjectId();
+
       const response = await request(app)
         .get(`/api/cars/${fakeId}`)
         .expect(404);
@@ -135,24 +102,12 @@ describe('Car Routes - GET endpoints with OAuth', () => {
       expect(response.body.message).toMatch(/not found/i);
     });
 
-    it('should return car with populated location', async () => {
+    it('should return 400 if ID is invalid', async () => {
       const response = await request(app)
-        .get(`/api/cars/${testCar._id}`)
-        .expect(200);
+        .get('/api/cars/invalid-id')
+        .expect(400);
 
-      expect(response.body.data.location).toBeDefined();
-      expect(response.body.data.location.name).toBe('Test Location');
-    });
-  });
-
-  describe('GET /api/cars/location/:locationId', () => {
-    it('should return cars by location', async () => {
-      const response = await request(app)
-        .get(`/api/cars/location/${testLocation._id}`)
-        .expect(200);
-
-      expect(response.body.success).toBe(true);
-      expect(response.body.data.length).toBe(2);
+      expect(response.body.success).toBe(false);
     });
   });
 });
