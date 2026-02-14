@@ -125,7 +125,10 @@ const bookingSchema = new mongoose.Schema(
       additionalCharges: Number,
       signature: String,
     },
-
+    bookingNumber: {
+      type: String,
+      unique: false,
+    },
     drivers: [
       {
         name: String,

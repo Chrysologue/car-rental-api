@@ -72,9 +72,11 @@ const addBookingValidation = [
     ])
     .withMessage('Invalid booking status'),
   body('paymentStatus')
+    .optional()
     .isIn(['pending', 'paid', 'partially-paid', 'refunded', 'failed'])
     .withMessage('Invalid payment status'),
   body('paymentMethod')
+    .optional()
     .isIn(['credit-card', 'debit-card', 'paypal', 'cash', 'bank-transfer'])
     .withMessage('Invalid payment method status'),
   body('pickupInspection.recordedBy')

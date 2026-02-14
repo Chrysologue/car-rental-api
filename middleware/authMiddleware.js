@@ -54,7 +54,9 @@ Auth.generateToken = async function (req, res) {
 Auth.verifyUser = async function (req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
-    return res.status(401).json({ error: 'Authorization missing' });
+    return res
+      .status(401)
+      .json({ error: 'Authentication required. Please log in to continue.' });
   }
   const [scheme, token] = authHeader.split(' ');
   if (scheme !== 'Bearer' || !token) {
