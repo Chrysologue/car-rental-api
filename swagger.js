@@ -69,10 +69,10 @@ All protected routes require a JWT token in the Authorization header:
       name: 'Bookings',
       description: 'Booking management endpoints',
     },
-    {
-      name: 'Public',
-      description: 'Public endpoints (no authentication required)',
-    },
+    // {
+    //   name: 'Public',
+    //   description: 'Public endpoints (no authentication required)',
+    // },
   ],
   paths: {
     // ================== PUBLIC ENDPOINTS ==================

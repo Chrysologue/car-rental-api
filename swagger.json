@@ -39,31 +39,9 @@
     {
       "name": "Bookings",
       "description": "Booking management endpoints"
-    },
-    {
-      "name": "Public",
-      "description": "Public endpoints (no authentication required)"
     }
   ],
   "paths": {
-    "/": {
-      "get": {
-        "tags": [
-          "Public"
-        ],
-        "summary": "Home endpoint",
-        "description": "Public home endpoint",
-        "security": [],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
     "/users": {
       "get": {
         "tags": [
