@@ -23,9 +23,7 @@ carRouter.post(
   '/',
   authMiddleware.verifyUser,
   checkAdmin,
-  mongoIdValidation,
   handleValidationErrors,
-  updateCarController,
   utilities.handleAsyncError(addCarController),
 );
 carRouter.get(

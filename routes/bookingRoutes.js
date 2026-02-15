@@ -28,7 +28,6 @@ bookingRouter.get(
   '/:id',
   authMiddleware.verifyUser,
   mongoIdValidation,
-  addBookingValidation,
   handleValidationErrors,
   utilities.handleAsyncError(getGetBookingByIdController),
 );
@@ -54,7 +53,6 @@ bookingRouter.delete(
   '/:id',
   authMiddleware.verifyUser,
   mongoIdValidation,
-  addBookingValidation,
   handleValidationErrors,
   utilities.handleAsyncError(deleteBookingController),
 );

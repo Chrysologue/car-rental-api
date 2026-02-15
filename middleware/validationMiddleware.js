@@ -369,6 +369,14 @@ const mongoIdValidation = [
     .withMessage('Invalid Mongo ID'),
 ];
 
+const mongoIdCarValidation = [
+  body()
+    .notEmpty()
+    .withMessage('Id cannot be empty')
+    .isMongoId()
+    .withMessage('Invalid location id'),
+];
+
 const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);
 
@@ -388,4 +396,5 @@ module.exports = {
   addBookingValidation,
   handleValidationErrors,
   mongoIdValidation,
+  mongoIdCarValidation,
 };
