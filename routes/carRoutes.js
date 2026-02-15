@@ -2,6 +2,7 @@ const { Router } = require('express');
 const authMiddleware = require('../middleware/authMiddleware');
 const { checkAdmin } = require('../middleware/adminMiddleware');
 const utilities = require('../middleware/errorMiddleware');
+const { addCarValidation } = require('../middleware/validationMiddleware.js');
 
 const {
   getAllCarsController,
@@ -23,6 +24,7 @@ carRouter.post(
   '/',
   authMiddleware.verifyUser,
   checkAdmin,
+  addCarValidation,
   handleValidationErrors,
   utilities.handleAsyncError(addCarController),
 );
@@ -38,6 +40,7 @@ carRouter.put(
   authMiddleware.verifyUser,
   checkAdmin,
   mongoIdValidation,
+  addCarValidation,
   handleValidationErrors,
   utilities.handleAsyncError(updateCarController),
 );

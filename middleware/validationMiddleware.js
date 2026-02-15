@@ -1,5 +1,44 @@
 const { body, param, validationResult } = require('express-validator');
 
+const addCarValidation = [
+  body('make').notEmpty().trim().withMessage('Car make cannot be empty'),
+  body('model').notEmpty().trim().withMessage('Car make cannot be empty'),
+  body('year')
+    .notEmpty()
+    .withMessage('Year date cannot be empty')
+    .isISO8601('Year should be in the format YYYY-MM-DD'),
+  body('licensePlate')
+    .notEmpty()
+    .trim()
+    .withMessage('licence plate cannot be empty'),
+  body('color').notEmpty().trim().withMessage('Color cannot be empty'),
+  body('seats')
+    .notEmpty()
+    .isInt({ min: 0 })
+    .trim()
+    .withMessage('Seats cannot be empty'),
+  body('transmission')
+    .notEmpty()
+    .trim()
+    .withMessage('Transmission make cannot be empty'),
+  body('fuelType')
+    .notEmpty()
+    .trim()
+    .withMessage('Fuel type make cannot be empty'),
+  body('mileage')
+    .notEmpty()
+    .trim()
+    .isInt({ min: 0 })
+    .withMessage('Mileage make cannot be empty'),
+  body('location').isMongoId().withMessage('Invalid location ID'),
+  body('status').notEmpty().trim().withMessage('Status make cannot be empty'),
+  body('pricePerDay')
+    .notEmpty()
+    .isInt({ min: 0 })
+    .trim()
+    .withMessage('Price per day cannot be empty'),
+];
+
 const addBookingValidation = [
   body('car').trim().notEmpty().withMessage('Car cannot be empty'),
   body('pickupLocation')
@@ -22,34 +61,34 @@ const addBookingValidation = [
     .trim()
     .notEmpty()
     .withMessage('Daily Rate cannot be empty')
-    .isInt({ min: 1 })
+    .isInt({ min: 0 })
     .withMessage('Daily Rate should be a number'),
   body('totalAmount')
     .optional()
     .trim()
     .notEmpty()
     .withMessage('Daily Rate cannot be empty')
-    .isInt({ min: 1 })
+    .isInt({ min: 0 })
     .withMessage('Daily Rate should be a number'),
   body('duration')
     .optional()
     .trim()
-    .isInt({ min: 1 })
+    .isInt({ min: 0 })
     .withMessage('Duration should be a number'),
   body('paidAmount')
     .optional()
     .trim()
-    .isInt({ min: 1 })
+    .isInt({ min: 0 })
     .withMessage('Paid amount should be a number'),
   body('securityDeposit')
     .optional()
     .trim()
-    .isInt({ min: 1 })
+    .isInt({ min: 0 })
     .withMessage('Security deposit should be a number'),
   body('deposited')
     .optional()
     .trim()
-    .isInt({ min: 1 })
+    .isInt({ min: 0 })
     .withMessage('Paid amount should be a number'),
   body('insurancOption')
     .optional()
@@ -364,14 +403,6 @@ const mongoIdValidation = [
     .withMessage('Invalid Mongo ID'),
 ];
 
-const mongoIdCarValidation = [
-  body()
-    .notEmpty()
-    .withMessage('Id cannot be empty')
-    .isMongoId()
-    .withMessage('Invalid location id'),
-];
-
 const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);
 
@@ -391,5 +422,5 @@ module.exports = {
   addBookingValidation,
   handleValidationErrors,
   mongoIdValidation,
-  mongoIdCarValidation,
+  addCarValidation,
 };
