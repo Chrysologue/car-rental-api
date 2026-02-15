@@ -1039,23 +1039,7 @@ All protected routes require a JWT token in the Authorization header:
             'bank-transfer',
           ],
         },
-        drivers: {
-          type: 'array',
-          items: {
-            type: 'object',
-            properties: {
-              name: { type: 'string' },
-              email: { type: 'string' },
-              phone: { type: 'string' },
-              licenseNumber: { type: 'string' },
-              licenseExpiry: { type: 'string', format: 'date' },
-              dateOfBirth: { type: 'string', format: 'date' },
-            },
-          },
-        },
-        specialRequests: { type: 'string', maxLength: 500 },
-        promotionCode: { type: 'string' },
-        loyaltyPointsUsed: { type: 'number' },
+      
       },
     },
   },

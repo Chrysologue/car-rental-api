@@ -62,6 +62,8 @@ const addBookingController = async (req, res) => {
     duration,
     dailyRate,
     totalAmount,
+    paidAmount,
+    securityDeposit,
   } = req.body;
 
   try {
@@ -100,6 +102,8 @@ const addBookingController = async (req, res) => {
       dailyRate,
       totalAmount,
       bookingNumber,
+      paidAmount,
+      securityDeposit,
     });
 
     const savedBooking = await newBooking.save();
