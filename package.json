@@ -4,7 +4,7 @@
   "description": "A Car Rental API for searching cars, booking rentals, and managing bookings. Built with Node.js, Express, MongoDB Atlas, JWT, and OAuth",
   "main": "server.js",
   "scripts": {
-    "test": "npm test",
+    "test": "jest",
     "dev": "nodemon server.js",
     "start": "node server.js",
     "lint": "eslint .",
@@ -51,7 +51,9 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
     "globals": "^17.3.0",
+    "jest": "^30.2.0",
     "nodemon": "^3.1.11",
-    "prettier": "^3.8.1"
+    "prettier": "^3.8.1",
+    "supertest": "^7.2.2"
   }
 }

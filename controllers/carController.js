@@ -6,7 +6,7 @@ const getAllCarsController = async (req, res) => {
     if (cars.length < 1) {
       return res.status(200).json({
         success: true,
-        message: 'You do not have any cars yet',
+        data: cars,
       });
     }
 
@@ -25,9 +25,7 @@ const getCarByIdController = async (req, res) => {
   try {
     const car = await Car.findById(id);
     if (!car) {
-      return res
-        .status(400)
-        .json({ success: false, message: 'Invalid request' });
+      return res.status(404).json({ success: false, message: 'Car not found' });
     }
 
     return res.status(200).json({ success: true, data: car });
