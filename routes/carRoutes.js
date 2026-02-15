@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const authMiddleware = require('../middleware/authMiddleware');
 const { checkAdmin } = require('../middleware/adminMiddleware');
+const utilities = require('../middleware/errorMiddleware');
 
 const {
   getAllCarsController,
@@ -16,7 +17,7 @@ const {
 
 const carRouter = Router();
 
-carRouter.get('/', getAllCarsController);
+carRouter.get('/', utilities.handleAsyncError(getAllCarsController));
 
 carRouter.post(
   '/',
@@ -25,13 +26,13 @@ carRouter.post(
   mongoIdValidation,
   handleValidationErrors,
   updateCarController,
-  addCarController,
+  utilities.handleAsyncError(addCarController),
 );
 carRouter.get(
   '/:id',
   mongoIdValidation,
   handleValidationErrors,
-  getCarByIdController,
+  utilities.handleAsyncError(getCarByIdController),
 );
 
 carRouter.put(
@@ -40,7 +41,7 @@ carRouter.put(
   checkAdmin,
   mongoIdValidation,
   handleValidationErrors,
-  updateCarController,
+  utilities.handleAsyncError(updateCarController),
 );
 
 carRouter.delete(
@@ -49,7 +50,7 @@ carRouter.delete(
   mongoIdValidation,
   checkAdmin,
   handleValidationErrors,
-  deleteCarController,
+  utilities.handleAsyncError(deleteCarController),
 );
 
 module.exports = carRouter;

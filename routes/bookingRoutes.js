@@ -6,6 +6,7 @@ const {
 } = require('../middleware/validationMiddleware');
 
 const authMiddleware = require('../middleware/authMiddleware');
+const utilities = require('../middleware/errorMiddleware');
 
 const {
   getAllBookingsController,
@@ -17,7 +18,11 @@ const {
 
 const bookingRouter = Router();
 
-bookingRouter.get('/', authMiddleware.verifyUser, getAllBookingsController);
+bookingRouter.get(
+  '/',
+  authMiddleware.verifyUser,
+  utilities.handleAsyncError(getAllBookingsController),
+);
 
 bookingRouter.get(
   '/:id',
@@ -25,7 +30,7 @@ bookingRouter.get(
   mongoIdValidation,
   addBookingValidation,
   handleValidationErrors,
-  getGetBookingByIdController,
+  utilities.handleAsyncError(getGetBookingByIdController),
 );
 
 bookingRouter.post(
@@ -33,7 +38,7 @@ bookingRouter.post(
   authMiddleware.verifyUser,
   addBookingValidation,
   handleValidationErrors,
-  addBookingController,
+  utilities.handleAsyncError(addBookingController),
 );
 
 bookingRouter.put(
@@ -42,7 +47,7 @@ bookingRouter.put(
   mongoIdValidation,
   addBookingValidation,
   handleValidationErrors,
-  addBookingController,
+  utilities.handleAsyncError(updateBookingController),
 );
 
 bookingRouter.delete(
@@ -51,7 +56,7 @@ bookingRouter.delete(
   mongoIdValidation,
   addBookingValidation,
   handleValidationErrors,
-  deleteBookingController,
+  utilities.handleAsyncError(deleteBookingController),
 );
 
 module.exports = bookingRouter;
