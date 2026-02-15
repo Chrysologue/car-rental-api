@@ -1,6 +1,7 @@
 const request = require('supertest');
 const express = require('express');
 const jwt = require('jsonwebtoken');
+
 const {
   getAllBookingsController,
   getGetBookingByIdController,
@@ -30,7 +31,6 @@ app.get('/api/bookings', getAllBookingsController);
 app.get('/api/bookings/:id', getGetBookingByIdController);
 
 const Booking = require('../models/bookingModels');
-const Car = require('../models/carModel');
 
 describe('Booking API Routes', () => {
   beforeEach(() => {
