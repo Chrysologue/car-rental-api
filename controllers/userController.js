@@ -7,7 +7,7 @@ const Usec = {};
 // Get all users
 Usec.getAllUser = async function (req, res) {
   try {
-    const allUsers = await User.find().select('-password'); // exclude password
+    const allUsers = await User.find({}, '-password'); // exclude password
     res.status(200).json(allUsers);
   } catch (e) {
     console.log(e.message);
@@ -56,7 +56,7 @@ Usec.getUserById = async (req, res) => {
       return res.status(400).json({ error: 'Invalid user ID' });
     }
 
-    const user = await User.findById(id).select('-password');
+    const user = await User.findById(id, '-password');
     if (!user) return res.status(404).json({ error: 'User not found' });
 
     res.status(200).json(user);
@@ -89,7 +89,8 @@ Usec.updateUser = async (req, res) => {
 
     const updatedUser = await User.findByIdAndUpdate(id, updates, {
       new: true,
-    }).select('-password');
+      projection: '-password',
+    });
     if (!updatedUser) return res.status(404).json({ error: 'User not found' });
 
     res.status(200).json({ message: 'User updated successfully', updatedUser });
