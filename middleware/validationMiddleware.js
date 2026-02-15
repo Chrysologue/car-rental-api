@@ -1,11 +1,6 @@
 const { body, param, validationResult } = require('express-validator');
 
 const addBookingValidation = [
-  body('user')
-    .isMongoId()
-    .withMessage('Invalid MongodId')
-    .notEmpty()
-    .withMessage('You must be logged in to make a booking'),
   body('car').trim().notEmpty().withMessage('Car cannot be empty'),
   body('pickupLocation')
     .trim()
