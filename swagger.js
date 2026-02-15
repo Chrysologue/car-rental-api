@@ -733,55 +733,8 @@ All protected routes require a JWT token in the Authorization header:
         },
       },
     },
-    '/bookings/user/{userId}': {
-      get: {
-        tags: ['Bookings'],
-        summary: 'Get user bookings',
-        description:
-          'Retrieve all bookings for a specific user (User can access own bookings, Admin can access any) - 🔒 Protected Route',
-        // Uses global security (shows padlock)
-        parameters: [
-          {
-            name: 'userId',
-            in: 'path',
-            required: true,
-            type: 'string',
-            description: 'User ID',
-          },
-          {
-            name: 'status',
-            in: 'query',
-            required: false,
-            type: 'string',
-            enum: [
-              'pending',
-              'confirmed',
-              'active',
-              'completed',
-              'cancelled',
-              'no-show',
-            ],
-            description: 'Filter bookings by status',
-          },
-        ],
-        responses: {
-          200: {
-            description: 'Success',
-            schema: {
-              type: 'array',
-              items: { $ref: '#/definitions/Booking' },
-            },
-          },
-          400: { description: 'Bad Request - Invalid ID format' },
-          401: { description: 'Unauthorized - Missing or invalid token' },
-          403: {
-            description: "Forbidden - Cannot access other users' bookings",
-          },
-          404: { description: 'User not found' },
-          500: { description: 'Internal Server Error' },
-        },
-      },
-    },
+    
+    
   },
   definitions: {
     User: {
