@@ -11,6 +11,7 @@ require('./config/passport.js');
 
 const userRoutes = require('./routes/userRoutes.js');
 const carRouter = require('./routes/carRoutes.js');
+const favoriteRouter = require('./routes/favoriteRoutes.js');
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use('/api', authRoute);
 app.use('/api', userRoutes);
 app.use('/api/bookings', bookingsRouter);
 app.use('/api/cars', carRouter);
+app.use('/api/favorites', favoriteRouter);
 
 app.get('/', (req, res) => {
   res.send(`
