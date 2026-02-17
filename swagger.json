@@ -2,11 +2,10 @@
   "swagger": "2.0",
   "info": {
     "title": "Car rental API",
-    "description": "\nA RESTful Car Rental API that allows users to register, authenticate, and rent cars\nfrom different locations. The system supports role-based access control with\nadmin and user roles. Admins can manage users, cars, and rental locations, while\nauthenticated users can browse locations, cars, and manage their bookings.\nAuthentication is handled using Google OAuth 2.0 with JWT tokens.\n\n## Authentication\nAll protected routes require a JWT token in the Authorization header:\n`Authorization: Bearer <your_jwt_token>`\n\n## Role-Based Access\n- **Public**: Routes accessible without authentication\n- **User**: Routes accessible to authenticated users\n- **Admin**: Routes accessible only to users with admin role\n    ",
+    "description": "\nA RESTful Car Rental API that allows users to register, authenticate, and rent cars\nfrom different locations. The system supports role-based access control with\nadmin and user roles. Admins can manage users, cars, and rental locations, while\nauthenticated users can browse locations, cars, and manage their bookings and favorites.\nAuthentication is handled using Google OAuth 2.0 with JWT tokens.\n\n## Authentication\nAll protected routes require a JWT token in the Authorization header:\n`Authorization: Bearer <your_jwt_token>`\n\n## Role-Based Access\n- **Public**: Routes accessible without authentication\n- **User**: Routes accessible to authenticated users\n- **Admin**: Routes accessible only to users with admin role\n    ",
     "version": "1.0.0"
   },
   "host": "localhost:3000",
-  "basePath": "/api",
   "schemes": [
     "http"
   ],
@@ -39,10 +38,14 @@
     {
       "name": "Bookings",
       "description": "Booking management endpoints"
+    },
+    {
+      "name": "Favorites",
+      "description": "Favorite cars management endpoints"
     }
   ],
   "paths": {
-    "/users": {
+    "/api/users": {
       "get": {
         "tags": [
           "Users"
@@ -71,7 +74,7 @@
         }
       }
     },
-    "/users/{id}": {
+    "/api/users/{id}": {
       "get": {
         "tags": [
           "Users"
@@ -203,7 +206,7 @@
         }
       }
     },
-    "/locations": {
+    "/api/locations": {
       "get": {
         "tags": [
           "Locations"
@@ -264,7 +267,7 @@
         }
       }
     },
-    "/locations/{id}": {
+    "/api/locations/{id}": {
       "get": {
         "tags": [
           "Locations"
@@ -391,7 +394,7 @@
         }
       }
     },
-    "/cars": {
+    "/api/cars": {
       "get": {
         "tags": [
           "Cars"
@@ -491,7 +494,7 @@
         }
       }
     },
-    "/cars/{id}": {
+    "/api/cars/{id}": {
       "get": {
         "tags": [
           "Cars"
@@ -615,7 +618,7 @@
         }
       }
     },
-    "/bookings": {
+    "/api/bookings": {
       "get": {
         "tags": [
           "Bookings"
@@ -684,7 +687,7 @@
         }
       }
     },
-    "/bookings/{id}": {
+    "/api/bookings/{id}": {
       "get": {
         "tags": [
           "Bookings"
@@ -812,6 +815,245 @@
           },
           "404": {
             "description": "Booking not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/favorites": {
+      "get": {
+        "tags": [
+          "Favorites"
+        ],
+        "summary": "Get user favorites",
+        "description": "Retrieve all favorite cars for the authenticated user - 🔒 Protected Route",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Favorite"
+                  }
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid token"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Favorites"
+        ],
+        "summary": "Add to favorites",
+        "description": "Add a car to user favorites - 🔒 Protected Route",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/FavoriteInput"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Favorite created successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "$ref": "#/definitions/Favorite"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid input data"
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid token"
+          },
+          "409": {
+            "description": "Conflict - Car already in favorites"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/favorites/{id}": {
+      "get": {
+        "tags": [
+          "Favorites"
+        ],
+        "summary": "Get favorite by ID",
+        "description": "Retrieve a specific favorite entry (User can access own favorites only) - 🔒 Protected Route",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Favorite ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "data": {
+                  "$ref": "#/definitions/Favorite"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid ID format"
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid token"
+          },
+          "403": {
+            "description": "Forbidden - Cannot access other users favorites"
+          },
+          "404": {
+            "description": "Favorite not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Favorites"
+        ],
+        "summary": "Update favorite",
+        "description": "Update favorite notes (User can update own favorites only) - 🔒 Protected Route",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Favorite ID"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/FavoriteUpdateInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Favorite updated successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "$ref": "#/definitions/Favorite"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid input data"
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid token"
+          },
+          "403": {
+            "description": "Forbidden - Cannot update other users favorites"
+          },
+          "404": {
+            "description": "Favorite not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Favorites"
+        ],
+        "summary": "Remove from favorites",
+        "description": "Remove a car from user favorites (User can remove own favorites only) - 🔒 Protected Route",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Favorite ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Favorite deleted successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Invalid ID format"
+          },
+          "401": {
+            "description": "Unauthorized - Missing or invalid token"
+          },
+          "403": {
+            "description": "Forbidden - Cannot delete other users favorites"
+          },
+          "404": {
+            "description": "Favorite not found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -1363,6 +1605,90 @@
             "cash",
             "bank-transfer"
           ]
+        }
+      }
+    },
+    "Favorite": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string"
+        },
+        "user": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            }
+          }
+        },
+        "car": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string"
+            },
+            "make": {
+              "type": "string"
+            },
+            "model": {
+              "type": "string"
+            },
+            "year": {
+              "type": "integer"
+            },
+            "pricePerDay": {
+              "type": "number"
+            },
+            "images": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "notes": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "FavoriteInput": {
+      "type": "object",
+      "required": [
+        "car"
+      ],
+      "properties": {
+        "car": {
+          "type": "string",
+          "description": "Car ID to add to favorites"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Optional notes about the favorite car"
+        }
+      }
+    },
+    "FavoriteUpdateInput": {
+      "type": "object",
+      "properties": {
+        "notes": {
+          "type": "string",
+          "description": "Update notes about the favorite car"
         }
       }
     }

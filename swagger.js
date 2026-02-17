@@ -12,7 +12,7 @@ const doc = {
 A RESTful Car Rental API that allows users to register, authenticate, and rent cars
 from different locations. The system supports role-based access control with
 admin and user roles. Admins can manage users, cars, and rental locations, while
-authenticated users can browse locations, cars, and manage their bookings.
+authenticated users can browse locations, cars, and manage their bookings and favorites.
 Authentication is handled using Google OAuth 2.0 with JWT tokens.
 
 ## Authentication
@@ -27,7 +27,6 @@ All protected routes require a JWT token in the Authorization header:
     version: '1.0.0',
   },
   host: isProd ? process.env.PROD_HOST : `localhost:${PORT}`,
-  basePath: '/api',
   schemes: isProd ? ['https'] : ['http'],
 
   // Global security definition - this enables the Authorize button at the top
@@ -49,10 +48,6 @@ All protected routes require a JWT token in the Authorization header:
   ],
 
   tags: [
-    // {
-    //   name: 'Authentication',
-    //   description: 'Authentication endpoints (Google OAuth) - Public',
-    // },
     {
       name: 'Users',
       description: 'User management endpoints',
@@ -69,79 +64,14 @@ All protected routes require a JWT token in the Authorization header:
       name: 'Bookings',
       description: 'Booking management endpoints',
     },
-    // {
-    //   name: 'Public',
-    //   description: 'Public endpoints (no authentication required)',
-    // },
+    {
+      name: 'Favorites',
+      description: 'Favorite cars management endpoints',
+    },
   ],
   paths: {
-    // ================== PUBLIC ENDPOINTS ==================
-    // '/': {
-    //   get: {
-    //     tags: ['Public'],
-    //     summary: 'Home endpoint',
-    //     description: 'Public home endpoint',
-    //     security: [], // Override global security - this route is public (no padlock)
-    //     responses: {
-    //       200: { description: 'OK' },
-    //       500: { description: 'Internal Server Error' },
-    //     },
-    //   },
-    // },
-    // ================== AUTHENTICATION ENDPOINTS ==================
-    // '/auth/login': {
-    //   get: {
-    //     tags: ['Authentication'],
-    //     summary: 'Google OAuth Login',
-    //     description: 'Initiate Google OAuth login flow',
-    //     security: [], // Public route (no padlock)
-    //     responses: {
-    //       302: {
-    //         description: 'Redirect to Google OAuth consent screen',
-    //         headers: {
-    //           Location: {
-    //             description: 'Google OAuth URL',
-    //             type: 'string',
-    //           },
-    //         },
-    //       },
-    //     },
-    //   },
-    // },
-    // '/auth/google/callback': {
-    //   get: {
-    //     tags: ['Authentication'],
-    //     summary: 'Google OAuth Callback',
-    //     description:
-    //       'Google OAuth callback endpoint - returns JWT token on success',
-    //     security: [], // Public route (no padlock)
-    //     responses: {
-    //       200: {
-    //         description: 'Authentication successful - returns JWT token',
-    //         schema: {
-    //           type: 'object',
-    //           properties: {
-    //             success: { type: 'boolean' },
-    //             token: { type: 'string' },
-    //             user: {
-    //               type: 'object',
-    //               properties: {
-    //                 _id: { type: 'string' },
-    //                 email: { type: 'string' },
-    //                 name: { type: 'string' },
-    //                 role: { type: 'string' },
-    //               },
-    //             },
-    //           },
-    //         },
-    //       },
-    //       401: { description: 'Authentication failed' },
-    //       500: { description: 'Internal Server Error' },
-    //     },
-    //   },
-    // },
     // ================== USER ENDPOINTS ==================
-    '/users': {
+    '/api/users': {
       get: {
         tags: ['Users'],
         summary: 'Get all users',
@@ -160,30 +90,8 @@ All protected routes require a JWT token in the Authorization header:
           500: { description: 'Internal Server Error' },
         },
       },
-      // post: {
-      //   tags: ['Users'],
-      //   summary: 'Create user',
-      //   description: 'Create a new user (Public)',
-      //   security: [], // Public route (no padlock)
-      //   parameters: [
-      //     {
-      //       name: 'body',
-      //       in: 'body',
-      //       required: true,
-      //       schema: { $ref: '#/definitions/UserInput' },
-      //     },
-      //   ],
-      //   responses: {
-      //     201: {
-      //       description: 'User created successfully',
-      //       schema: { $ref: '#/definitions/User' },
-      //     },
-      //     400: { description: 'Bad Request - Invalid input data' },
-      //     500: { description: 'Internal Server Error' },
-      //   },
-      // },
     },
-    '/users/{id}': {
+    '/api/users/{id}': {
       get: {
         tags: ['Users'],
         summary: 'Get user by ID',
@@ -279,7 +187,7 @@ All protected routes require a JWT token in the Authorization header:
       },
     },
     // ================== LOCATION ENDPOINTS ==================
-    '/locations': {
+    '/api/locations': {
       get: {
         tags: ['Locations'],
         summary: 'Get all locations',
@@ -322,7 +230,7 @@ All protected routes require a JWT token in the Authorization header:
         },
       },
     },
-    '/locations/{id}': {
+    '/api/locations/{id}': {
       get: {
         tags: ['Locations'],
         summary: 'Get location by ID',
@@ -414,7 +322,7 @@ All protected routes require a JWT token in the Authorization header:
       },
     },
     // ================== CARS ENDPOINTS ==================
-    '/cars': {
+    '/api/cars': {
       get: {
         tags: ['Cars'],
         summary: 'Get all cars',
@@ -496,7 +404,7 @@ All protected routes require a JWT token in the Authorization header:
         },
       },
     },
-    '/cars/{id}': {
+    '/api/cars/{id}': {
       get: {
         tags: ['Cars'],
         summary: 'Get car by ID',
@@ -585,7 +493,7 @@ All protected routes require a JWT token in the Authorization header:
       },
     },
     // ================== BOOKING ENDPOINTS ==================
-    '/bookings': {
+    '/api/bookings': {
       get: {
         tags: ['Bookings'],
         summary: 'Get all bookings',
@@ -633,7 +541,7 @@ All protected routes require a JWT token in the Authorization header:
         },
       },
     },
-    '/bookings/{id}': {
+    '/api/bookings/{id}': {
       get: {
         tags: ['Bookings'],
         summary: 'Get booking by ID',
@@ -733,8 +641,179 @@ All protected routes require a JWT token in the Authorization header:
         },
       },
     },
-    
-    
+    // ================== FAVORITES ENDPOINTS ==================
+    '/api/favorites': {
+      get: {
+        tags: ['Favorites'],
+        summary: 'Get user favorites',
+        description:
+          'Retrieve all favorite cars for the authenticated user - 🔒 Protected Route',
+        // Uses global security (shows padlock)
+        responses: {
+          200: {
+            description: 'Success',
+            schema: {
+              type: 'object',
+              properties: {
+                success: { type: 'boolean' },
+                data: {
+                  type: 'array',
+                  items: { $ref: '#/definitions/Favorite' },
+                },
+                message: { type: 'string' },
+              },
+            },
+          },
+          401: { description: 'Unauthorized - Missing or invalid token' },
+          500: { description: 'Internal Server Error' },
+        },
+      },
+      post: {
+        tags: ['Favorites'],
+        summary: 'Add to favorites',
+        description: 'Add a car to user favorites - 🔒 Protected Route',
+        // Uses global security (shows padlock)
+        parameters: [
+          {
+            name: 'body',
+            in: 'body',
+            required: true,
+            schema: { $ref: '#/definitions/FavoriteInput' },
+          },
+        ],
+        responses: {
+          201: {
+            description: 'Favorite created successfully',
+            schema: {
+              type: 'object',
+              properties: {
+                success: { type: 'boolean' },
+                message: { type: 'string' },
+                data: { $ref: '#/definitions/Favorite' },
+              },
+            },
+          },
+          400: { description: 'Bad Request - Invalid input data' },
+          401: { description: 'Unauthorized - Missing or invalid token' },
+          409: { description: 'Conflict - Car already in favorites' },
+          500: { description: 'Internal Server Error' },
+        },
+      },
+    },
+    '/api/favorites/{id}': {
+      get: {
+        tags: ['Favorites'],
+        summary: 'Get favorite by ID',
+        description:
+          'Retrieve a specific favorite entry (User can access own favorites only) - 🔒 Protected Route',
+        // Uses global security (shows padlock)
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            type: 'string',
+            description: 'Favorite ID',
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Success',
+            schema: {
+              type: 'object',
+              properties: {
+                success: { type: 'boolean' },
+                data: { $ref: '#/definitions/Favorite' },
+              },
+            },
+          },
+          400: { description: 'Bad Request - Invalid ID format' },
+          401: { description: 'Unauthorized - Missing or invalid token' },
+          403: {
+            description: 'Forbidden - Cannot access other users favorites',
+          },
+          404: { description: 'Favorite not found' },
+          500: { description: 'Internal Server Error' },
+        },
+      },
+      put: {
+        tags: ['Favorites'],
+        summary: 'Update favorite',
+        description:
+          'Update favorite notes (User can update own favorites only) - 🔒 Protected Route',
+        // Uses global security (shows padlock)
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            type: 'string',
+            description: 'Favorite ID',
+          },
+          {
+            name: 'body',
+            in: 'body',
+            required: true,
+            schema: { $ref: '#/definitions/FavoriteUpdateInput' },
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Favorite updated successfully',
+            schema: {
+              type: 'object',
+              properties: {
+                success: { type: 'boolean' },
+                message: { type: 'string' },
+                data: { $ref: '#/definitions/Favorite' },
+              },
+            },
+          },
+          400: { description: 'Bad Request - Invalid input data' },
+          401: { description: 'Unauthorized - Missing or invalid token' },
+          403: {
+            description: 'Forbidden - Cannot update other users favorites',
+          },
+          404: { description: 'Favorite not found' },
+          500: { description: 'Internal Server Error' },
+        },
+      },
+      delete: {
+        tags: ['Favorites'],
+        summary: 'Remove from favorites',
+        description:
+          'Remove a car from user favorites (User can remove own favorites only) - 🔒 Protected Route',
+        // Uses global security (shows padlock)
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            type: 'string',
+            description: 'Favorite ID',
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Favorite deleted successfully',
+            schema: {
+              type: 'object',
+              properties: {
+                success: { type: 'boolean' },
+                message: { type: 'string' },
+              },
+            },
+          },
+          400: { description: 'Bad Request - Invalid ID format' },
+          401: { description: 'Unauthorized - Missing or invalid token' },
+          403: {
+            description: 'Forbidden - Cannot delete other users favorites',
+          },
+          404: { description: 'Favorite not found' },
+          500: { description: 'Internal Server Error' },
+        },
+      },
+    },
   },
   definitions: {
     User: {
@@ -1039,7 +1118,60 @@ All protected routes require a JWT token in the Authorization header:
             'bank-transfer',
           ],
         },
-      
+      },
+    },
+    Favorite: {
+      type: 'object',
+      properties: {
+        _id: { type: 'string' },
+        user: {
+          type: 'object',
+          properties: {
+            _id: { type: 'string' },
+            name: { type: 'string' },
+            email: { type: 'string' },
+          },
+        },
+        car: {
+          type: 'object',
+          properties: {
+            _id: { type: 'string' },
+            make: { type: 'string' },
+            model: { type: 'string' },
+            year: { type: 'integer' },
+            pricePerDay: { type: 'number' },
+            images: {
+              type: 'array',
+              items: { type: 'string' },
+            },
+          },
+        },
+        notes: { type: 'string' },
+        createdAt: { type: 'string', format: 'date-time' },
+        updatedAt: { type: 'string', format: 'date-time' },
+      },
+    },
+    FavoriteInput: {
+      type: 'object',
+      required: ['car'],
+      properties: {
+        car: {
+          type: 'string',
+          description: 'Car ID to add to favorites',
+        },
+        notes: {
+          type: 'string',
+          description: 'Optional notes about the favorite car',
+        },
+      },
+    },
+    FavoriteUpdateInput: {
+      type: 'object',
+      properties: {
+        notes: {
+          type: 'string',
+          description: 'Update notes about the favorite car',
+        },
       },
     },
   },
