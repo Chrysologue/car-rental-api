@@ -1,5 +1,10 @@
 const { body, param, validationResult } = require('express-validator');
 
+const addFavoriteValidation = [
+  body('user').optional().isMongoId().withMessage('Invalid user id'),
+  body('car').isMongoId().withMessage('Invalid car id'),
+];
+
 const addCarValidation = [
   body('make').notEmpty().trim().withMessage('Car make cannot be empty'),
   body('model').notEmpty().trim().withMessage('Car make cannot be empty'),
@@ -423,4 +428,5 @@ module.exports = {
   handleValidationErrors,
   mongoIdValidation,
   addCarValidation,
+  addFavoriteValidation,
 };

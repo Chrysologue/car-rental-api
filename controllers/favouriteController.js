@@ -18,7 +18,7 @@ const getAllFavoritesController = async (req, res) => {
 };
 
 const createFavoriteController = async (req, res) => {
-  const { user, car } = req.body;
+  const { user, car, notes } = req.body;
   try {
     if (user) {
       if (user !== req.user.id) {
@@ -31,6 +31,7 @@ const createFavoriteController = async (req, res) => {
     const newFavorite = new Favorite({
       user: req.user.id,
       car,
+      notes,
     });
 
     const savedFavorite = await newFavorite.save();
@@ -80,7 +81,7 @@ const updateFavoriteController = async (req, res) => {
   }
 };
 
-const getAllFavoriteByIdController = async (req, res) => {
+const getFavoriteByIdController = async (req, res) => {
   const { id } = req.params;
   try {
     const favorite = await Favorite.findById(id);
@@ -119,6 +120,6 @@ module.exports = {
   getAllFavoritesController,
   createFavoriteController,
   updateFavoriteController,
-  getAllFavoriteByIdController,
+  getFavoriteByIdController,
   deleteFavoriteByIdController,
 };
