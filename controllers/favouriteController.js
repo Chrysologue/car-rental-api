@@ -18,7 +18,7 @@ const getAllFavoritesController = async (req, res) => {
 };
 
 const createFavoriteController = async (req, res) => {
-  const { user, car, notes } = req.body;
+  const { title, user, car, notes } = req.body;
   try {
     if (user) {
       if (user !== req.user.id) {
@@ -29,6 +29,7 @@ const createFavoriteController = async (req, res) => {
     }
 
     const newFavorite = new Favorite({
+      title,
       user: req.user.id,
       car,
       notes,
@@ -49,7 +50,7 @@ const createFavoriteController = async (req, res) => {
 
 const updateFavoriteController = async (req, res) => {
   const { id } = req.params;
-  const { user, car, notes } = req.body;
+  const { title, user, car, notes } = req.body;
   try {
     if (user) {
       if (user !== req.user.id) {
@@ -62,6 +63,7 @@ const updateFavoriteController = async (req, res) => {
       id,
       {
         $set: {
+          title,
           user: req.user.id,
           car,
           notes,

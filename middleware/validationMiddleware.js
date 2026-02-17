@@ -1,6 +1,7 @@
 const { body, param, validationResult } = require('express-validator');
 
 const addFavoriteValidation = [
+  body('title').notEmpty().withMessage('Title connot be empty'),
   body('user').optional().isMongoId().withMessage('Invalid user id'),
   body('car').isMongoId().withMessage('Invalid car id'),
 ];
