@@ -871,7 +871,8 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/FavoriteInput"
-            }
+            },
+            "description": "Favorite object to add"
           }
         ],
         "responses": {
@@ -893,7 +894,7 @@
             }
           },
           "400": {
-            "description": "Bad Request - Invalid input data"
+            "description": "Bad Request - Invalid input data or user credentials mismatch"
           },
           "401": {
             "description": "Unauthorized - Missing or invalid token"
@@ -960,7 +961,7 @@
           "Favorites"
         ],
         "summary": "Update favorite",
-        "description": "Update favorite notes (User can update own favorites only) - 🔒 Protected Route",
+        "description": "Update favorite details (User can update own favorites only) - 🔒 Protected Route",
         "parameters": [
           {
             "name": "id",
@@ -975,7 +976,8 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/FavoriteUpdateInput"
-            }
+            },
+            "description": "Updated favorite object"
           }
         ],
         "responses": {
@@ -997,7 +999,7 @@
             }
           },
           "400": {
-            "description": "Bad Request - Invalid input data"
+            "description": "Bad Request - Invalid input data or user credentials mismatch"
           },
           "401": {
             "description": "Unauthorized - Missing or invalid token"
@@ -1614,6 +1616,10 @@
         "_id": {
           "type": "string"
         },
+        "title": {
+          "type": "string",
+          "description": "Title of the favorite entry"
+        },
         "user": {
           "type": "object",
           "properties": {
@@ -1673,6 +1679,10 @@
         "car"
       ],
       "properties": {
+        "title": {
+          "type": "string",
+          "description": "Title for the favorite entry (required by model)"
+        },
         "car": {
           "type": "string",
           "description": "Car ID to add to favorites"
@@ -1686,9 +1696,17 @@
     "FavoriteUpdateInput": {
       "type": "object",
       "properties": {
+        "title": {
+          "type": "string",
+          "description": "Updated title for the favorite entry"
+        },
+        "car": {
+          "type": "string",
+          "description": "Updated car ID"
+        },
         "notes": {
           "type": "string",
-          "description": "Update notes about the favorite car"
+          "description": "Updated notes about the favorite car"
         }
       }
     }

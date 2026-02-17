@@ -679,6 +679,7 @@ All protected routes require a JWT token in the Authorization header:
             in: 'body',
             required: true,
             schema: { $ref: '#/definitions/FavoriteInput' },
+            description: 'Favorite object to add',
           },
         ],
         responses: {
@@ -693,7 +694,10 @@ All protected routes require a JWT token in the Authorization header:
               },
             },
           },
-          400: { description: 'Bad Request - Invalid input data' },
+          400: {
+            description:
+              'Bad Request - Invalid input data or user credentials mismatch',
+          },
           401: { description: 'Unauthorized - Missing or invalid token' },
           409: { description: 'Conflict - Car already in favorites' },
           500: { description: 'Internal Server Error' },
@@ -740,7 +744,7 @@ All protected routes require a JWT token in the Authorization header:
         tags: ['Favorites'],
         summary: 'Update favorite',
         description:
-          'Update favorite notes (User can update own favorites only) - 🔒 Protected Route',
+          'Update favorite details (User can update own favorites only) - 🔒 Protected Route',
         // Uses global security (shows padlock)
         parameters: [
           {
@@ -755,6 +759,7 @@ All protected routes require a JWT token in the Authorization header:
             in: 'body',
             required: true,
             schema: { $ref: '#/definitions/FavoriteUpdateInput' },
+            description: 'Updated favorite object',
           },
         ],
         responses: {
@@ -769,7 +774,10 @@ All protected routes require a JWT token in the Authorization header:
               },
             },
           },
-          400: { description: 'Bad Request - Invalid input data' },
+          400: {
+            description:
+              'Bad Request - Invalid input data or user credentials mismatch',
+          },
           401: { description: 'Unauthorized - Missing or invalid token' },
           403: {
             description: 'Forbidden - Cannot update other users favorites',
@@ -1124,6 +1132,10 @@ All protected routes require a JWT token in the Authorization header:
       type: 'object',
       properties: {
         _id: { type: 'string' },
+        title: {
+          type: 'string',
+          description: 'Title of the favorite entry',
+        },
         user: {
           type: 'object',
           properties: {
@@ -1155,6 +1167,10 @@ All protected routes require a JWT token in the Authorization header:
       type: 'object',
       required: ['car'],
       properties: {
+        title: {
+          type: 'string',
+          description: 'Title for the favorite entry (required by model)',
+        },
         car: {
           type: 'string',
           description: 'Car ID to add to favorites',
@@ -1168,9 +1184,17 @@ All protected routes require a JWT token in the Authorization header:
     FavoriteUpdateInput: {
       type: 'object',
       properties: {
+        title: {
+          type: 'string',
+          description: 'Updated title for the favorite entry',
+        },
+        car: {
+          type: 'string',
+          description: 'Updated car ID',
+        },
         notes: {
           type: 'string',
-          description: 'Update notes about the favorite car',
+          description: 'Updated notes about the favorite car',
         },
       },
     },
