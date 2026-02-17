@@ -80,8 +80,45 @@ const updateFavoriteController = async (req, res) => {
   }
 };
 
+const getAllFavoriteByIdController = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const favorite = await Favorite.findById(id);
+
+    if (!favorite) {
+      return res
+        .status(404)
+        .json({ message: 'No favorite found', data: favorite });
+    }
+
+    return res.status(200).json({ success: true, data: favorite });
+  } catch (error) {
+    console.log(`Error in getAllFavoriteByIdController:${error.message}`);
+    return res.status(500).json('Internal server error');
+  }
+};
+
+const deleteFavoriteByIdController = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const favorite = await Favorite.findByIdAndDelete(id);
+
+    if (!favorite) {
+      return res.status(404).json({ message: 'No favorite found' });
+    }
+
+    return res
+      .status(200)
+      .json({ success: true, message: 'Favorite successfully deleted!' });
+  } catch (error) {
+    console.log(`Error in deleteFavoriteByIdController:${error.message}`);
+    return res.status(500).json('Internal server error');
+  }
+};
 module.exports = {
   getAllFavoritesController,
   createFavoriteController,
   updateFavoriteController,
+  getAllFavoriteByIdController,
+  deleteFavoriteByIdController,
 };

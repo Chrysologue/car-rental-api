@@ -3,6 +3,8 @@ const {
   getAllFavoritesController,
   createFavoriteController,
   updateFavoriteController,
+  getAllFavoriteByIdController,
+  deleteFavoriteByIdController,
 } = require('../controllers/favouriteController');
 const authMiddleware = require('../middleware/authMiddleware');
 const utilities = require('../middleware/errorMiddleware');
@@ -31,6 +33,22 @@ favoriteRouter.put(
   mongoIdValidation,
   handleValidationErrors,
   utilities.handleAsyncError(updateFavoriteController),
+);
+
+favoriteRouter.get(
+  '/:id',
+  authMiddleware.verifyUser,
+  mongoIdValidation,
+  handleValidationErrors,
+  utilities.handleAsyncError(getAllFavoriteByIdController),
+);
+
+favoriteRouter.delete(
+  '/:id',
+  authMiddleware.verifyUser,
+  mongoIdValidation,
+  handleValidationErrors,
+  utilities.handleAsyncError(deleteFavoriteByIdController),
 );
 
 module.exports = favoriteRouter;
