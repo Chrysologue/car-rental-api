@@ -5,15 +5,16 @@ const getAllFavoritesController = async (req, res) => {
     const favorites = await Favorite.find({});
 
     if (favorites.length === 0) {
-      return res
-        .status(200)
-        .json({ message: 'No favorites found', data: favorites });
+      return res.status(200).json({
+        success: true,
+        message: 'You have no favorites yet',
+      });
     }
 
     return res.status(200).json({ success: true, data: favorites });
   } catch (error) {
     console.log(`Error in getAllFavoriesController:${error.message}`);
-    return res.status(500).json('Internal server error');
+    return res.status(500).json('Internal Server Error');
   }
 };
 
@@ -44,7 +45,7 @@ const createFavoriteController = async (req, res) => {
     });
   } catch (error) {
     console.log(`Error in createFavoriteController:${error.message}`);
-    return res.status(500).json('Internal server error');
+    return res.status(500).json('Internal Server Error');
   }
 };
 
@@ -79,7 +80,7 @@ const updateFavoriteController = async (req, res) => {
     });
   } catch (error) {
     console.log(`Error in updateFavoriteController:${error.message}`);
-    return res.status(500).json('Internal server error');
+    return res.status(500).json('Internal Server Error');
   }
 };
 
@@ -90,14 +91,14 @@ const getFavoriteByIdController = async (req, res) => {
 
     if (!favorite) {
       return res
-        .status(404)
-        .json({ message: 'No favorite found', data: favorite });
+        .status(400)
+        .json({ success: false, message: 'Bad request Favorite not found' });
     }
 
     return res.status(200).json({ success: true, data: favorite });
   } catch (error) {
     console.log(`Error in getAllFavoriteByIdController:${error.message}`);
-    return res.status(500).json('Internal server error');
+    return res.status(500).json('Internal Server Error');
   }
 };
 
@@ -115,7 +116,7 @@ const deleteFavoriteByIdController = async (req, res) => {
       .json({ success: true, message: 'Favorite successfully deleted!' });
   } catch (error) {
     console.log(`Error in deleteFavoriteByIdController:${error.message}`);
-    return res.status(500).json('Internal server error');
+    return res.status(500).json('Internal Server Error');
   }
 };
 module.exports = {
