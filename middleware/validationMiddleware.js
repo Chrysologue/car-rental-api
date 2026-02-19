@@ -46,7 +46,7 @@ const addCarValidation = [
 ];
 
 const addBookingValidation = [
-  body('car').trim().notEmpty().withMessage('Car cannot be empty'),
+  body('car').isMongoId().withMessage('Invalid car ID'),
   body('pickupLocation')
     .trim()
     .notEmpty()
